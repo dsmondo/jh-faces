@@ -53,6 +53,15 @@ services:
       - bridge-net
     container_name: jhfaces-phpmyadmin
 
+  webhook:
+      build:
+        context: /home/jgp/jh-faces/scripts/deploy/
+      ports:
+        - "3003:3003"
+      networks:
+        - bridge-net
+      container_name: jhfaces-WebHook
+
 networks:
   bridge-net:
     driver: bridge
