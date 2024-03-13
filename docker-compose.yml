@@ -18,7 +18,7 @@ services:
 
   django:
     build:
-      context: /home/jgp/jh-faces/src
+      context: /home/jgp/jh-faces/app
       dockerfile: /home/jgp/jh-faces/DockerFile
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
