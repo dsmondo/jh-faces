@@ -6,8 +6,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>지훈과 얼굴들</title>
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <script src="https://kit.fontawesome.com/addd9ad2f2.js" crossorigin="anonymous"></script>
+    <script>
+        (function () {
+            var w = window;
+            if (w.ChannelIO) {
+                return w.console.error("ChannelIO script included twice.");
+            }
+            var ch = function () {
+                ch.c(arguments);
+            };
+            ch.q = [];
+            ch.c = function (args) {
+                ch.q.push(args);
+            };
+            w.ChannelIO = ch;
+
+            function l() {
+                if (w.ChannelIOInitialized) {
+                    return;
+                }
+                w.ChannelIOInitialized = true;
+                var s = document.createElement("script");
+                s.type = "text/javascript";
+                s.async = true;
+                s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js";
+                var x = document.getElementsByTagName("script")[0];
+                if (x.parentNode) {
+                    x.parentNode.insertBefore(s, x);
+                }
+            }
+
+            if (document.readyState === "complete") {
+                l();
+            } else {
+                w.addEventListener("DOMContentLoaded", l);
+                w.addEventListener("load", l);
+            }
+        })();
+
+        ChannelIO('boot', {
+            "pluginKey": "0924de9d-2a46-438a-b944-574439866f66"
+        });
+    </script>
 </head>
 <body style="margin: 0px;">
 <div class="topbar">
@@ -30,125 +73,164 @@
 </div>
 <div class="contents">
     <div class="sidebar">
-        <div class="card" style="background:#6cd273;">
-            <div class="card-title">
-                <a>지훈 충전소</a>
-            </div>
-            <div class="card-contents">
-                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">
-                    <i style="color: #FC4F5C" class="fa-solid fa-bolt"></i>
-                    <a style="font-weight: 600;color: #FC4F5C">급속 50kW</a>
+        {% for station_info in data.value.result %}
+            <div class="card" style="background:#6cd273;">
+                <div class="card-title">
+                    <a>{{ station_info.Charging_Station_Name }}</a>
                 </div>
-                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">1기 사용가능</a>
+                {% if '급속' in station_info %}
+                    <div class="card-contents">
+                        <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">
+                            <i style="color: #FC4F5C" class="fa-solid fa-bolt"></i>
+                            <a style="font-weight: 600;color: #FC4F5C">급속</a>
+                        </div>
+                        <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">{{ station_info.급속.count }}기 사용가능</a>
+                    </div>
+                {% endif %}
+                {% if '완속' in station_info %}
+                    <div class="card-contents">
+                        <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">
+                            <i style="color: #4294FB" class="fa-solid fa-bolt"></i>
+                            <a style="font-weight: 600;color: #4294FB">완속</a>
+                        </div>
+                        <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">{{ station_info.완속.count }}기 사용가능</a>
+                    </div>
+                {% endif %}
             </div>
-            <div class="card-contents">
-                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">
-                    <i style="color: #4294FB" class="fa-solid fa-bolt"></i>
-                    <a style="font-weight: 600;color: #4294FB">급속 50kW</a>
-                </div>
-                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">10기 사용가능</a>
-            </div>
+        {% endfor %}
+
+        <div class="pagination">
+    <span class="step-links">
+        {% if data.value.result.has_previous %}
+            <a href="?page=1">&laquo; 처음</a>
+            <a href="?page={{ data.value.result.previous_page_number }}">이전</a>
+        {% endif %}
+
+        <span class="current">
+            페이지 {{ data.value.result.number }} / {{ data.value.result.paginator.num_pages }}.
+        </span>
+
+        {% if data.value.result.has_next %}
+            <a href="?page={{ data.value.result.next_page_number }}">다음</a>
+            <a href="?page={{ data.value.result.paginator.num_pages }}">마지막 &raquo;</a>
+        {% endif %}
+    </span>
         </div>
 
-        <div class="card" style="background:#ee869a;">
-            <div class="card-title">
-                <a>혜원 충전소</a>
-            </div>
-            <div class="card-contents">
-                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">
-                    <i style="color: #FC4F5C" class="fa-solid fa-bolt"></i>
-                    <a style="font-weight: 600;color: #FC4F5C">급속 50kW</a>
-                </div>
-                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">1기 사용가능</a>
-            </div>
-            <div class="card-contents">
-                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">
-                    <i style="color: #4294FB" class="fa-solid fa-bolt"></i>
-                    <a style="font-weight: 600;color: #4294FB">급속 50kW</a>
-                </div>
-                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">10기 사용가능</a>
-            </div>
-        </div>
 
-        <div class="card" style="background:#6670c9;">
-            <div class="card-title">
-                <a>지건 충전소</a>
-            </div>
-            <div class="card-contents">
-                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">
-                    <i style="color: #FC4F5C" class="fa-solid fa-bolt"></i>
-                    <a style="font-weight: 600;color: #FC4F5C">급속 50kW</a>
-                </div>
-                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">1기 사용가능</a>
-            </div>
-            <div class="card-contents">
-                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">
-                    <i style="color: #4294FB" class="fa-solid fa-bolt"></i>
-                    <a style="font-weight: 600;color: #4294FB">급속 50kW</a>
-                </div>
-                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">10기 사용가능</a>
-            </div>
-        </div>
-
-        <div class="card" style="background:#ffc869;">
-            <div class="card-title">
-                <a>예원 충전소</a>
-            </div>
-            <div class="card-contents">
-                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">
-                    <i style="color: #FC4F5C" class="fa-solid fa-bolt"></i>
-                    <a style="font-weight: 600;color: #FC4F5C">급속 50kW</a>
-                </div>
-                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">1기 사용가능</a>
-            </div>
-            <div class="card-contents">
-                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">
-                    <i style="color: #4294FB" class="fa-solid fa-bolt"></i>
-                    <a style="font-weight: 600;color: #4294FB">급속 50kW</a>
-                </div>
-                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">10기 사용가능</a>
-            </div>
-        </div>
-
-        <div class="card" style="background:#ff6e4f;">
-            <div class="card-title">
-                <a>수민 충전소</a>
-            </div>
-            <div class="card-contents">
-                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">
-                    <i style="color: #FC4F5C" class="fa-solid fa-bolt"></i>
-                    <a style="font-weight: 600;color: #FC4F5C">급속 50kW</a>
-                </div>
-                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">1기 사용가능</a>
-            </div>
-            <div class="card-contents">
-                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">
-                    <i style="color: #4294FB" class="fa-solid fa-bolt"></i>
-                    <a style="font-weight: 600;color: #4294FB">급속 50kW</a>
-                </div>
-                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">10기 사용가능</a>
-            </div>
-        </div>
-
-        <div class="card" style="background:#6670c9;">
-            <div class="card-title">
-                <a>유진 충전소</a>
-            </div>
-            <div class="card-contents">
-                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">
-                    <i style="color: #FC4F5C" class="fa-solid fa-bolt"></i>
-                    <a style="font-weight: 600;color: #FC4F5C">급속 50kW</a>
-                </div>
-                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">1기 사용가능</a>
-            </div>
-            <div class="card-contents">
-                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">
-                    <i style="color: #4294FB" class="fa-solid fa-bolt"></i>
-                    <a style="font-weight: 600;color: #4294FB">급속 50kW</a>
-                </div>
-                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">10기 사용가능</a>
-            </div>
-        </div>
+        {##}
+        {#        <div class="card" style="background:#6cd273;">#}
+        {#            <div class="card-title">#}
+        {#                <a>지훈 충전소</a>#}
+        {#            </div>#}
+        {#            <div class="card-contents">#}
+        {#                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">#}
+        {#                    <i style="color: #4294FB" class="fa-solid fa-bolt"></i>#}
+        {#                    <a style="font-weight: 600;color: #4294FB">급속 50kW</a>#}
+        {#                </div>#}
+        {#                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">10기 사용가능</a>#}
+        {#            </div>#}
+        {#        </div>#}
+        {##}
+        {#        <div class="card" style="background:#ee869a;">#}
+        {#            <div class="card-title">#}
+        {#                <a>혜원 충전소</a>#}
+        {#            </div>#}
+        {#            <div class="card-contents">#}
+        {#                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">#}
+        {#                    <i style="color: #FC4F5C" class="fa-solid fa-bolt"></i>#}
+        {#                    <a style="font-weight: 600;color: #FC4F5C">급속 50kW</a>#}
+        {#                </div>#}
+        {#                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">1기 사용가능</a>#}
+        {#            </div>#}
+        {#            <div class="card-contents">#}
+        {#                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">#}
+        {#                    <i style="color: #4294FB" class="fa-solid fa-bolt"></i>#}
+        {#                    <a style="font-weight: 600;color: #4294FB">급속 50kW</a>#}
+        {#                </div>#}
+        {#                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">10기 사용가능</a>#}
+        {#            </div>#}
+        {#        </div>#}
+        {##}
+        {#        <div class="card" style="background:#6670c9;">#}
+        {#            <div class="card-title">#}
+        {#                <a>지건 충전소</a>#}
+        {#            </div>#}
+        {#            <div class="card-contents">#}
+        {#                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">#}
+        {#                    <i style="color: #FC4F5C" class="fa-solid fa-bolt"></i>#}
+        {#                    <a style="font-weight: 600;color: #FC4F5C">급속 50kW</a>#}
+        {#                </div>#}
+        {#                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">1기 사용가능</a>#}
+        {#            </div>#}
+        {#            <div class="card-contents">#}
+        {#                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">#}
+        {#                    <i style="color: #4294FB" class="fa-solid fa-bolt"></i>#}
+        {#                    <a style="font-weight: 600;color: #4294FB">급속 50kW</a>#}
+        {#                </div>#}
+        {#                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">10기 사용가능</a>#}
+        {#            </div>#}
+        {#        </div>#}
+        {##}
+        {#        <div class="card" style="background:#ffc869;">#}
+        {#            <div class="card-title">#}
+        {#                <a>예원 충전소</a>#}
+        {#            </div>#}
+        {#            <div class="card-contents">#}
+        {#                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">#}
+        {#                    <i style="color: #FC4F5C" class="fa-solid fa-bolt"></i>#}
+        {#                    <a style="font-weight: 600;color: #FC4F5C">급속 50kW</a>#}
+        {#                </div>#}
+        {#                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">1기 사용가능</a>#}
+        {#            </div>#}
+        {#            <div class="card-contents">#}
+        {#                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">#}
+        {#                    <i style="color: #4294FB" class="fa-solid fa-bolt"></i>#}
+        {#                    <a style="font-weight: 600;color: #4294FB">급속 50kW</a>#}
+        {#                </div>#}
+        {#                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">10기 사용가능</a>#}
+        {#            </div>#}
+        {#        </div>#}
+        {##}
+        {#        <div class="card" style="background:#ff6e4f;">#}
+        {#            <div class="card-title">#}
+        {#                <a>수민 충전소</a>#}
+        {#            </div>#}
+        {#            <div class="card-contents">#}
+        {#                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">#}
+        {#                    <i style="color: #FC4F5C" class="fa-solid fa-bolt"></i>#}
+        {#                    <a style="font-weight: 600;color: #FC4F5C">급속 50kW</a>#}
+        {#                </div>#}
+        {#                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">1기 사용가능</a>#}
+        {#            </div>#}
+        {#            <div class="card-contents">#}
+        {#                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">#}
+        {#                    <i style="color: #4294FB" class="fa-solid fa-bolt"></i>#}
+        {#                    <a style="font-weight: 600;color: #4294FB">급속 50kW</a>#}
+        {#                </div>#}
+        {#                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">10기 사용가능</a>#}
+        {#            </div>#}
+        {#        </div>#}
+        {##}
+        {#        <div class="card" style="background:#6670c9;">#}
+        {#            <div class="card-title">#}
+        {#                <a>유진 충전소</a>#}
+        {#            </div>#}
+        {#            <div class="card-contents">#}
+        {#                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">#}
+        {#                    <i style="color: #FC4F5C" class="fa-solid fa-bolt"></i>#}
+        {#                    <a style="font-weight: 600;color: #FC4F5C">급속 50kW</a>#}
+        {#                </div>#}
+        {#                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">1기 사용가능</a>#}
+        {#            </div>#}
+        {#            <div class="card-contents">#}
+        {#                <div style="background: #FFFFFF;border-radius: 20px;padding: 3px 12px">#}
+        {#                    <i style="color: #4294FB" class="fa-solid fa-bolt"></i>#}
+        {#                    <a style="font-weight: 600;color: #4294FB">급속 50kW</a>#}
+        {#                </div>#}
+        {#                <a style="margin: 0px 0px 0px 10px;padding: 3px 0px">10기 사용가능</a>#}
+        {#            </div>#}
+        {#        </div>#}
 
     </div>
     <div class="map">
