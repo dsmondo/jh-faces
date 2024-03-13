@@ -55,7 +55,7 @@ services:
 
   webhook:
       build:
-        context: /home/jgp/jh-faces/scripts/deploy/
+        context: /home/jgp/jh-faces/script/deploy/
       ports:
         - "3003:3003"
       networks:
