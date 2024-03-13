@@ -1,3 +1,4 @@
 django
 djangorestframework
 pymysql
+python-dotenv
