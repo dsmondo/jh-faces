@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  db:
+    image: mariadb
+    volumes:
+      - jhfaces-db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      - bridge-net
+    container_name: jhfaces-DB
+
+  django:
+    build:
+      context: /home/jgp/jh-faces/src
+      dockerfile: /home/jgp/jh-faces/DockerFile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - /home/jgp/jh-faces/app:/usr/src/app
+    depends_on:
+      - db
+    networks:
+      - bridge-net
+    container_name: jhfaces-Django
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - /home/jgp/jh-faces/etc/nginx:/etc/nginx/conf.d
+      - /home/jgp/jh-faces/src/static:/static  # JGPLabs static files
+    depends_on:
+      - django
+    ports:
+      - "8003:8003"
+    networks:
+      - bridge-net
+    container_name: jhfaces-Nginx
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+    restart: always
+    ports:
+      - "8083:80"
+    networks:
+      - bridge-net
+    container_name: jhfaces-phpmyadmin
+
+networks:
+  bridge-net:
+    driver: bridge
+
+volumes:
+  jhfaces-db_data:
