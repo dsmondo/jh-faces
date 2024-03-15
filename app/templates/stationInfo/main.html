@@ -10,6 +10,31 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <script src="https://kit.fontawesome.com/addd9ad2f2.js" crossorigin="anonymous"></script>
     <script>
+        function moveAndPinning(x, y) {
+            var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                mapOption = {
+                    center: new kakao.maps.LatLng(x, y), // 지도의 중심좌표
+                    level: 3 // 지도의 확대 레벨
+                };
+
+            var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+            // 마커가 표시될 위치입니다
+            var markerPosition = new kakao.maps.LatLng(x, y);
+
+            // 마커를 생성합니다
+            var marker = new kakao.maps.Marker({
+                position: markerPosition
+            });
+
+            // 마커가 지도 위에 표시되도록 설정합니다
+            marker.setMap(map);
+
+            // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
+            // marker.setMap(null);
+        };
+
+
         (function () {
             var w = window;
             if (w.ChannelIO) {
@@ -61,7 +86,7 @@
     <div class="topbar-contents">
         <div class="topbar-group" style="margin: 0px 0px 0px 30px">
             <a href="#">입지 분석도구</a>
-            <a href="#">충전소 정보</a>
+            <a href="/stationInfo">충전소 정보</a>
             <a href="#">충전기 관리</a>
             <a href="#">고객지원</a>
         </div>
@@ -74,7 +99,7 @@
 <div class="contents">
     <div class="sidebar">
         {% for station_info in data.value.result %}
-            <div class="card" style="background:#6cd273;">
+            <div onclick="moveAndPinning({{ station_info.Latitude }}, {{ station_info.Longitude }})" class="card" style="background:#6cd273;{% if '급속' in station_info and '완속' in station_info and station_info.Charging_Station_Name|length > 14 %}height: 165px;{% elif station_info.Charging_Station_Name|length > 14 %}height: 130px;{% endif %}">
                 <div class="card-title">
                     <a>{{ station_info.Charging_Station_Name }}</a>
                 </div>
@@ -99,24 +124,27 @@
             </div>
         {% endfor %}
 
+
         <div class="pagination">
-    <span class="step-links">
-        {% if data.value.result.has_previous %}
-            <a href="?page=1">&laquo; 처음</a>
-            <a href="?page={{ data.value.result.previous_page_number }}">이전</a>
-        {% endif %}
+            {% if data.value.result.has_previous %}
+                <a style="font-weight: 600" href="/stationInfo?page=1">&laquo;</a>
+                <a style="font-weight: 400" href="/stationInfo?page={{ data.value.result.previous_page_number }}">이전</a>
+            {% else %}
+                <a style="font-weight: 600;color:#5d5d5d">&laquo;</a>
+                <a style="font-weight: 400;color:#5d5d5d">이전</a>
+            {% endif %}
 
-        <span class="current">
-            페이지 {{ data.value.result.number }} / {{ data.value.result.paginator.num_pages }}.
-        </span>
+            <a>{{ data.value.result.number }} / {{ data.value.result.paginator.num_pages }}</a>
 
-        {% if data.value.result.has_next %}
-            <a href="?page={{ data.value.result.next_page_number }}">다음</a>
-            <a href="?page={{ data.value.result.paginator.num_pages }}">마지막 &raquo;</a>
-        {% endif %}
-    </span>
+            {% if data.value.result.has_next %}
+                <a href="/stationInfo?page={{ data.value.result.next_page_number }}">다음</a>
+                <a style="font-weight: 600"
+                   href="/stationInfo?page={{ data.value.result.paginator.num_pages }}">&raquo;</a>
+            {% else %}
+                <a style="font-weight: 600;color:#5d5d5d">다음</a>
+                <a style="font-weight: 400;color:#5d5d5d">&raquo;</a>
+            {% endif %}
         </div>
-
 
         {##}
         {#        <div class="card" style="background:#6cd273;">#}
