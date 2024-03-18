@@ -33,7 +33,7 @@ services:
     image: nginx:latest
     volumes:
       - /home/jgp/jh-faces/etc/nginx:/etc/nginx/conf.d
-      - /home/jgp/jh-faces/src/static:/static  # JGPLabs static files
+      - /home/jgp/jh-faces/app/static:/static  # JGPLabs static files
     depends_on:
       - django
     ports:
