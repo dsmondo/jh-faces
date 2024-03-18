@@ -3,3 +3,4 @@ djangorestframework
 pymysql
 python-dotenv
 pandas
+requests
