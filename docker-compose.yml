@@ -19,7 +19,7 @@ services:
   django:
     build:
       context: /home/jgp/jh-faces/app
-      dockerfile: /home/jgp/jh-faces/DockerFile
+      dockerfile: /home/jgp/jh-faces/Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - /home/jgp/jh-faces/app:/usr/src/app
@@ -33,7 +33,7 @@ services:
     image: nginx:latest
     volumes:
       - /home/jgp/jh-faces/etc/nginx:/etc/nginx/conf.d
-      - /home/jgp/jh-faces/app/static:/static  # JGPLabs static files
+      - /home/jgp/jh-faces/app/static:/static  # static files
     depends_on:
       - django
     ports:
