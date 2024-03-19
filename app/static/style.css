@@ -115,7 +115,7 @@ body {
 }
 
 .sidebar-card-top-title {
-    margin: 15px 0px 10px 0px;
+    margin: 10px 0px 0px 0px;
 }
 
 .sidebar-card-top-title a {
@@ -126,7 +126,7 @@ body {
 .pagination {
     display: flex;
     justify-content: space-between;
-    margin: 0px 0px 10px 0px;
+    margin: 5px 0px 5px 0px;
 
 }
 
@@ -182,20 +182,22 @@ body {
 
 .sidebar-detail {
     width: 380px;
+    overflow-y: auto;
+    max-height: calc(100vh - 85px);
 }
 
 .card-detail {
     background:#FFFFFF;
-    height: 90%;
     width: 350px;
     border-radius: 20px;
     align-items: center;
     box-shadow: 0px 5px 5px 5px rgba(0,0,0,0.1);
+    padding: 0px 0px 15px 0px;
 }
 
 .card-title-detail {
     text-align: left;
-    width: 350px;
+    width: 310px;
     padding: 20px 0px 10px 0px;
     margin: 20px 0px 0px 20px;
 
@@ -223,7 +225,8 @@ body {
     background: #181818;
     border-radius: 20px;
     padding: 2px 10px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 500;
     margin: 0px 5px 0px 0px;
 }
 
@@ -247,5 +250,5 @@ body {
 
 .card-subtitle img {
     filter: invert(100%) sepia(5%) saturate(0%) hue-rotate(41deg) brightness(107%) contrast(105%);
-    height: 20px;
+    height: 15px;
 }

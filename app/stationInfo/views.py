@@ -1,16 +1,19 @@
 from django.shortcuts import render
-from rest_framework.views import APIView
-from rest_framework.response import Response
-
 from django.db.models import Count
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 
-# Create your views here.
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from stationInfo.models import Charging_Station_Info
 
 import requests
-from django.http import JsonResponse
+import os
+
+# .env 파일 로드
+from dotenv import load_dotenv
+load_dotenv()
 
 def get_ev_charger_info(request, statId):
     # API 요청 URL 구성
@@ -19,15 +22,18 @@ def get_ev_charger_info(request, statId):
     params = {
         'serviceKey': service_key,
         'pageNo': '1',
-        'numOfRows': '10',
+        'numOfRows': '50',
         'dataType': 'JSON'
     }
 
     if statId != None:
         params['statId'] = statId
+    try:
+        response = requests.get(url, params=params, timeout=5)
+        data = response.json()  # 응답 데이터를 JSON으로 변환
+    except:
+        data = None
 
-    response = requests.get(url, params=params)
-    data = response.json()  # 응답 데이터를 JSON으로 변환
 
     return data  # JSON 응답 반환
 
@@ -35,12 +41,18 @@ def get_location_info(request, statId):
     try:
         charging_station = Charging_Station_Info.objects.filter(Station_ID=statId).first()
         if charging_station:
+            stationLiveInfo = get_ev_charger_info(request, statId)
+            try:
+                if str(stationLiveInfo['items']['item']) == '[]':
+                    stationLiveInfo = None
+            except:
+                stationLiveInfo = None
             result = {
                 'Address': charging_station.Address,
                 'Charging_Station_Name': charging_station.Charging_Station_Name,
                 'Latitude': charging_station.Latitude,
                 'Longitude': charging_station.Longitude,
-                'stationLiveInfo': get_ev_charger_info(request, statId)
+                'stationLiveInfo': stationLiveInfo
             }
             return result
         else:
