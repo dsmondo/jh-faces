@@ -41,7 +41,7 @@ body {
     display: flex;
     justify-content: space-between;
     background-color: #FFFFFF;
-    box-shadow: 0px 35px 25px -3px rgba(0,0,0,0.1);
+    box-shadow: 0px 35px 25px -3px rgba(0, 0, 0, 0.1);
     width: 100vw;
     margin: 0px;
     padding: 15px 0px;
@@ -88,30 +88,67 @@ body {
     color: #64BF6A;
 }
 
-
+/* 사이드바 기본 스타일 */
 .sidebar {
     display: flex;
     width: 800px;
     position: relative;
     z-index: 10;
+    transition: transform 0.3s ease;
+}
+
+/* 사이드바 숨김 스타일 */
+.sidebar-hidden-main {
+    transform: translateX(-100%);
+}
+
+/* 사이드바 숨김 스타일 */
+.sidebar-hidden-list {
+    transform: translateX(-100%);
+}
+
+/* 사이드바 숨김 스타일 */
+.sidebar-hidden-detail {
+    transform: translateX(-200%);
 }
 
 .sidebar-list {
     width: 320px;
     overflow-y: auto;
     max-height: calc(100vh - 85px);
+    transition: transform 0.3s ease;
+}
+
+.sidebar-card-toggle {
+    display: none;
+    padding: 5px 1.5px;
+    width: 10px;
+    height: 20px;
+    border-radius: 0px 5px 5px 0px;
+    margin: 50px 0px 0px 0px;
+    background-color: white;
+    box-shadow: 30px 0px 30px 0px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+.sidebar-card-toggle svg {
+    height: 10px;
+    margin: 0px;
+    padding: 0px;
 }
 
 
 .sidebar-card-top {
+    width: 260px;
+    height: 80px;
     display: flex;
     flex-direction: column;
-    background: #ffffff;
+    background-color: #ffffff;
     border-radius: 20px;
     padding: 5px 10px;
-    margin: 20px 20px 10px 20px;
+    margin: 20px 0px 10px 20px;
     text-align: center;
-    box-shadow: 0px 5px 5px 5px rgba(0,0,0,0.1);
+    box-shadow: 0px 5px 5px 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-card-top-title {
@@ -137,24 +174,23 @@ body {
 
 
 .pagination a[href]:hover {
-    background: #bebebe;
+    background-color: #bebebe;
     padding: 0px 5px;
     border-radius: 5px;
 }
 
 .card {
-    background: #3A3A3A;
-    height: 105px;
     border-radius: 20px;
     align-items: center;
     margin: 10px 20px;
-    box-shadow: 0px 5px 5px 5px rgba(0,0,0,0.1);
+    box-shadow: 0px 5px 5px 5px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+    background-color: #6cd273;
 }
 
 .card-title {
     justify-content: center;
-    width: 260px;
+    width: 250px;
     margin: 0px 15px 10px 15px;
     padding: 20px 0px 0px 0px;
 }
@@ -184,27 +220,33 @@ body {
     width: 380px;
     overflow-y: auto;
     max-height: calc(100vh - 85px);
+    transition: transform 0.3s ease;
 }
 
 .card-detail {
-    background:#FFFFFF;
+    background-color: #FFFFFF;
     width: 350px;
     border-radius: 20px;
     align-items: center;
-    box-shadow: 0px 5px 5px 5px rgba(0,0,0,0.1);
+    box-shadow: 0px 5px 5px 5px rgba(0, 0, 0, 0.1);
     padding: 0px 0px 15px 0px;
 }
 
 .card-title-detail {
     text-align: left;
     width: 310px;
-    padding: 20px 0px 10px 0px;
+    padding: 20px 0px 5px 0px;
     margin: 20px 0px 0px 20px;
 
 }
 
-.card-title-detail a {
-    font-size: 30px;
+.card-title-detail button {
+    border: 0;
+    background-color: transparent;
+}
+
+.card-title-detail a, button {
+    font-size: 23px;
     color: #181818;
     font-weight: 800;
 }
@@ -220,35 +262,50 @@ body {
 }
 
 
-
 .card-icon {
-    background: #181818;
-    border-radius: 20px;
-    padding: 2px 10px;
-    font-size: 15px;
-    font-weight: 500;
+    display: flex;
+    /*background-color: #282828;*/
+    /*border-radius: 20px;*/
+    /*padding: 2px 5px;*/
     margin: 0px 5px 0px 0px;
+    /*box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);*/
 }
 
+.card-icon img, svg {
+    margin: 0 0 0 5px;
+    height: 20px;
+}
+
+
+.card-icon a {
+    margin: 0px 5px;
+    color: #181818;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.card-icon svg {
+    margin: 0px 1px 0px 0px;
+}
 
 
 .card-subtitle {
     text-align: left;
     height: 25px;
-    margin: 10px 0px 5px 20px;
+    margin: 2px 0px 2px 20px;
 
 }
 
 .card-subtitle a {
-    background: #181818;
+    background-color: #3973F6;
     border-radius: 20px;
     padding: 2px 10px;
-    font-size: 20px;
+    font-size: 17px;
     color: #FFFFFF;
     font-weight: 600;
 }
 
 .card-subtitle img {
     filter: invert(100%) sepia(5%) saturate(0%) hue-rotate(41deg) brightness(107%) contrast(105%);
-    height: 15px;
+    height: 13px;
 }
