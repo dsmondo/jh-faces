@@ -9,7 +9,7 @@
 
 a, h1, h2, h3, h4, span, table, div, input, input::placeholder {
     letter-spacing: -0.8px;
-    font-family: Pretendard;
+    font-family: Pretendard, serif;
     color: #1c1c1c;
     text-decoration-line: none;
 }
@@ -22,8 +22,102 @@ html {
 body {
     min-height: 100%;
     overflow-y: hidden;
-    margin: 0px;
+    margin: 0;
 }
+
+
+.sidebar-tools {
+    background-color: #EFEFEF;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 10px 5px;
+
+}
+
+.sidebar-tools a {
+    color: #181818;
+}
+
+
+.sidebar-tools a[href]:hover {
+    background-color: #bebebe;
+    padding: 0 5px;
+    border-radius: 5px;
+}
+
+.search {
+    padding: 10px 0;
+}
+
+
+.search input {
+    width: 75px;
+    height: 18px;
+    border: 0;
+    background-color: #EDEDED;
+    color: #181818;
+    border-radius: 5px;
+    padding: 2px 10px;
+    font-size: 13px;
+}
+
+.search input::placeholder {
+    color: #757575;
+}
+
+.search button {
+    width: 40px;
+    height: 23px;
+    border: 0;
+    background-color: #84CE7A;
+    color: #FFFFFF;
+    font-weight: 600;
+    border-radius: 5px;
+    padding: 2px 5px;
+    font-size: 13px;
+    margin: 0 0 0 5px;
+}
+
+
+.menu-container {
+    padding: 10px 8px;
+    border-radius: 10px;
+    text-align: left;
+    margin: 5px 0 0 0;
+}
+
+.menu-title {
+    margin: 0 0 5px 4px;
+    display: flex;
+    flex-direction: row;
+}
+
+.menu-title a {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.menu-button-container {
+    display: flex;
+    justify-content: start;
+    margin: 5px 0 0 0;
+}
+
+.menu-button {
+    margin: 0 3px;
+}
+
+.menu-button a {
+    cursor: pointer;
+    background-color: #FFFFFF;
+    padding: 2px 6px;;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
 
 .map-container {
     position: absolute;
@@ -41,10 +135,10 @@ body {
     display: flex;
     justify-content: space-between;
     background-color: #FFFFFF;
-    box-shadow: 0px 35px 25px -3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 35px 25px -3px rgba(0, 0, 0, 0.1);
     width: 100vw;
-    margin: 0px;
-    padding: 15px 0px;
+    margin: 0;
+    padding: 15px 0;
     vertical-align: center;
     position: relative;
     z-index: 5
@@ -61,7 +155,7 @@ body {
 .topbar-contents a {
     font-size: 20px;
     font-weight: 600;
-    margin: 0px 10px 0px 10px;
+    margin: 0 10px 0 10px;
 }
 
 .topbar-group {
@@ -69,14 +163,14 @@ body {
 }
 
 .topbar-logo {
-    margin: 0px 60px 0px 60px;
+    margin: 0 60px 0 60px;
     cursor: pointer;
 }
 
 .topbar-logo img {
     width: 200px;
     height: auto;
-    margin: 0px;
+    margin: 0;
 }
 
 .topbar-logo h1 {
@@ -84,7 +178,7 @@ body {
     text-align: center;
     font-size: 14.5px;
     width: 200px;
-    margin: 0px;
+    margin: 0;
     color: #64BF6A;
 }
 
@@ -113,7 +207,7 @@ body {
 }
 
 .sidebar-list {
-    width: 320px;
+    width: 340px;
     overflow-y: auto;
     max-height: calc(100vh - 85px);
     transition: transform 0.3s ease;
@@ -124,35 +218,35 @@ body {
     padding: 5px 1.5px;
     width: 10px;
     height: 20px;
-    border-radius: 0px 5px 5px 0px;
-    margin: 50px 0px 0px 0px;
+    border-radius: 0 5px 5px 0;
+    margin: 50px 0 0 0;
     background-color: white;
-    box-shadow: 30px 0px 30px 0px rgba(0,0,0,0.1);
+    box-shadow: 30px 0 30px 0 rgba(0, 0, 0, 0.1);
     cursor: pointer;
 }
 
 .sidebar-card-toggle svg {
     height: 10px;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 
 .sidebar-card-top {
-    width: 260px;
+    width: 280px;
     height: 80px;
     display: flex;
     flex-direction: column;
     background-color: #ffffff;
     border-radius: 20px;
     padding: 5px 10px;
-    margin: 20px 0px 10px 20px;
+    margin: 20px 0 10px 20px;
     text-align: center;
-    box-shadow: 0px 5px 5px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-card-top-title {
-    margin: 10px 0px 0px 0px;
+    margin: 10px 0 0 0;
 }
 
 .sidebar-card-top-title a {
@@ -163,19 +257,18 @@ body {
 .pagination {
     display: flex;
     justify-content: space-between;
-    margin: 5px 0px 5px 0px;
+    margin: 5px 0 5px 0;
 
 }
 
 .pagination a {
     color: #181818;
-    padding: 0px 5px;
 }
 
 
 .pagination a[href]:hover {
     background-color: #bebebe;
-    padding: 0px 5px;
+    padding: 0 5px;
     border-radius: 5px;
 }
 
@@ -183,7 +276,7 @@ body {
     border-radius: 20px;
     align-items: center;
     margin: 10px 20px;
-    box-shadow: 0px 5px 5px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     background-color: #6cd273;
 }
@@ -191,14 +284,14 @@ body {
 .card-title {
     justify-content: center;
     width: 250px;
-    margin: 0px 15px 10px 15px;
-    padding: 20px 0px 0px 0px;
+    margin: 0 15px 10px 15px;
+    padding: 20px 0 0 0;
 }
 
 .card-title a {
     font-size: 23px;
     font-weight: 600;
-    margin: 20px 0px 5px 0px;
+    margin: 20px 0 5px 0;
     color: white;
 }
 
@@ -228,15 +321,15 @@ body {
     width: 350px;
     border-radius: 20px;
     align-items: center;
-    box-shadow: 0px 5px 5px 5px rgba(0, 0, 0, 0.1);
-    padding: 0px 0px 15px 0px;
+    box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.1);
+    padding: 0 0 15px 0;
 }
 
 .card-title-detail {
     text-align: left;
     width: 310px;
-    padding: 20px 0px 5px 0px;
-    margin: 20px 0px 0px 20px;
+    padding: 20px 0 5px 0;
+    margin: 20px 0 0 20px;
 
 }
 
@@ -258,7 +351,7 @@ body {
 }
 
 .card-contents-detail svg {
-    margin: 0px 5px 0px 0px;
+    margin: 0 5px 0 0;
 }
 
 
@@ -267,8 +360,8 @@ body {
     /*background-color: #282828;*/
     /*border-radius: 20px;*/
     /*padding: 2px 5px;*/
-    margin: 0px 5px 0px 0px;
-    /*box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);*/
+    margin: 0 5px 0 0;
+    /*box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);*/
 }
 
 .card-icon img, svg {
@@ -278,21 +371,21 @@ body {
 
 
 .card-icon a {
-    margin: 0px 5px;
+    margin: 0 5px;
     color: #181818;
     font-size: 15px;
     font-weight: 500;
 }
 
 .card-icon svg {
-    margin: 0px 1px 0px 0px;
+    margin: 0 1px 0 0;
 }
 
 
 .card-subtitle {
     text-align: left;
     height: 25px;
-    margin: 2px 0px 2px 20px;
+    margin: 2px 0 2px 20px;
 
 }
 
@@ -308,4 +401,14 @@ body {
 .card-subtitle img {
     filter: invert(100%) sepia(5%) saturate(0%) hue-rotate(41deg) brightness(107%) contrast(105%);
     height: 13px;
+}
+
+
+.area {
+    background: white;
+    border: 1px solid #bdbdbd;
+    border-radius: 3px;
+    font-size: 12px;
+    padding: 5px;
+    font-weight: 700;
 }

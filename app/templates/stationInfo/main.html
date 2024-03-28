@@ -1,150 +1,9 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>지훈과 얼굴들</title>
-    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    <script src="https://kit.fontawesome.com/addd9ad2f2.js" crossorigin="anonymous"></script>
-    <script>
-        function moveAndPinning(x, y) {
-            var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-                mapOption = {
-                    center: new kakao.maps.LatLng(x + 0.0005, y - 0.003), // 지도의 중심좌표
-                    level: 3 // 지도의 확대 레벨
-                };
-
-            var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-
-            // 마커가 표시될 위치입니다
-            var markerPosition = new kakao.maps.LatLng(x, y);
-
-            // 마커를 생성합니다
-            var marker = new kakao.maps.Marker({
-                position: markerPosition
-            });
-
-            // 마커가 지도 위에 표시되도록 설정합니다
-            marker.setMap(map);
-
-
-            const inputNode = document.getElementById("map");
-            inputNode.style.removeProperty('position')
-            inputNode.style.position = 'static'
-
-            // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
-            // marker.setMap(null);
-        };
-
-
-        function updateStationID(stationID) {
-            // 현재 URL 가져오기
-            var currentUrl = window.location.href;
-
-            // URL 파라미터 파싱하기
-            var urlParams = new URLSearchParams(window.location.search);
-
-            // stationID가 없으면 기본값으로 설정
-            if (!stationID) {
-                stationID = '1';
-            }
-
-            // 새로운 stationID 설정
-            urlParams.set('stationID', stationID);
-
-            // 새로운 URL 생성
-            var newUrl = currentUrl.split('?')[0] + '?' + urlParams.toString();
-
-            // 현재 URL이 바뀌었는지 확인 후 리다이렉트
-            if (currentUrl !== newUrl) {
-                window.location.href = newUrl;
-            }
-        }
-
-
-        // 사이드바 토글 기능
-        function toggleSidebar(className, hiddenerClass, mode) {
-            var sidebar = document.querySelector(className);
-            if (mode == 'add') {
-                sidebar.classList.add(hiddenerClass);
-                var addButton = document.querySelector('.sidebar-card-toggle')
-                addButton.style.display = 'block'
-            }
-            if (mode == 'remove') {
-                sidebar.classList.remove(hiddenerClass);
-                var addButton = document.querySelector('.sidebar-card-toggle')
-                addButton.style.display = 'none'
-            }
-            if (mode == 'toggle') {
-                sidebar.classList.toggle(hiddenerClass);
-            }
-        }
-
-        (function () {
-            var w = window;
-            if (w.ChannelIO) {
-                return w.console.error("ChannelIO script included twice.");
-            }
-            var ch = function () {
-                ch.c(arguments);
-            };
-            ch.q = [];
-            ch.c = function (args) {
-                ch.q.push(args);
-            };
-            w.ChannelIO = ch;
-
-            function l() {
-                if (w.ChannelIOInitialized) {
-                    return;
-                }
-                w.ChannelIOInitialized = true;
-                var s = document.createElement("script");
-                s.type = "text/javascript";
-                s.async = true;
-                s.src = "https://cdn.channel.io/plugin/ch-plugin-web.js";
-                var x = document.getElementsByTagName("script")[0];
-                if (x.parentNode) {
-                    x.parentNode.insertBefore(s, x);
-                }
-            }
-
-            if (document.readyState === "complete") {
-                l();
-            } else {
-                w.addEventListener("DOMContentLoaded", l);
-                w.addEventListener("load", l);
-            }
-        })();
-
-        ChannelIO('boot', {
-            "pluginKey": "0924de9d-2a46-438a-b944-574439866f66"
-        });
-    </script>
-</head>
-<div>
-    <div class="topbar">
-        <div class="topbar-logo">
-            <img src="{% static 'logo.png' %}">
-            <h1>전기자동차 충전소 입지 분석도구</h1>
-        </div>
-        <div class="topbar-contents">
-            <div class="topbar-group" style="margin: 0px 0px 0px 30px">
-                <a href="#">입지 분석도구</a>
-                <a href="/stationInfo">충전소 정보</a>
-                <a href="#">충전기 관리</a>
-                <a href="#">고객지원</a>
-            </div>
-            <div class="topbar-group" style="margin: 0px 20px 0px 0px">
-                <a href="#">로그인</a>
-                <a href="#">회원가입</a>
-            </div>
-        </div>
-    </div>
-
+{% block title %}지훈과 얼굴들{% endblock %}
+{% block content %}
+    <div>
     <div class="map-container" id="map">
         <div class="sidebar">
             <div class="sidebar-list">
@@ -175,7 +34,8 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="sidebar-card-toggle" onclick="toggleSidebar('.sidebar-detail', 'sidebar-hidden-detail', 'remove')">
+                    <div class="sidebar-card-toggle"
+                         onclick="toggleSidebar('.sidebar-detail', 'sidebar-hidden-detail', 'remove')">
                         <i class="fa-solid fa-chevron-right"></i>
                     </div>
                 </div>
@@ -249,13 +109,15 @@
                     </div>
                 </div>
             </div>
+        
             {% if data.ui.isDetail == True %}
                 <div class="sidebar-detail">
                     <div class="card-detail">
                         <div class="card-title-detail">
                             <div style="display: flex;justify-content: space-between">
                                 <a>{{ data.value.stationInfo.Charging_Station_Name }}</a>
-                                <button onclick="toggleSidebar('.sidebar-detail', 'sidebar-hidden-detail', 'add')"><i class="fa-solid fa-close"></i></button>
+                                <button onclick="toggleSidebar('.sidebar-detail', 'sidebar-hidden-detail', 'add')"><i
+                                        class="fa-solid fa-close"></i></button>
                             </div>
                         </div>
                         <div class="card-contents-detail">
@@ -358,50 +220,8 @@
                     </div>
                 </div>
             {% endif %}
-
         </div>
     </div>
+</div>
+{% endblock %}
 
-
-    <script type="text/javascript"
-            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fdcff0079fabbfce8f4e4c2b86c4d763"></script>
-
-    <script>
-        var container = document.getElementById('map');
-        var options = {
-
-            {% if data.ui.isDetail == True %}
-                center: new kakao.maps.LatLng({{ data.value.stationInfo.Latitude }} + 0.0005, {{ data.value.stationInfo.Longitude }} - 0.003),
-                level: 3
-            {% else %}
-                center: new kakao.maps.LatLng(35.01580038568427, 126.71084931904467),
-                level: 5
-            {% endif %}
-        };
-
-        var map = new kakao.maps.Map(container, options);
-
-        {% if data.ui.isDetail == True %}
-
-            // 마커가 표시될 위치입니다
-            var markerPosition = new kakao.maps.LatLng({{ data.value.stationInfo.Latitude }}, {{ data.value.stationInfo.Longitude }});
-
-            // 마커를 생성합니다
-            var marker = new kakao.maps.Marker({
-                position: markerPosition
-            });
-
-            // 마커가 지도 위에 표시되도록 설정합니다
-            marker.setMap(map);
-        {% endif %}
-
-
-        const inputNode = document.getElementById("map");
-        inputNode.style.removeProperty('position')
-        inputNode.style.position = 'static'
-
-
-    </script>
-
-    </body>
-</html>

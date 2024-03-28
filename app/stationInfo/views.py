@@ -4,6 +4,8 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.conf import settings
 
+from django.contrib.staticfiles import finders
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -12,6 +14,7 @@ from stationInfo.models import Charging_Station_Info
 import requests
 import os
 import re
+import json
 
 from collections import defaultdict
 
@@ -194,5 +197,7 @@ class MainPage(APIView):
                 data['ui']['isDetail'] = True
                 data['ui']['hasLogo'] = stationInfo['logo_exists']
                 data['value']['stationInfo'] = stationInfo
+
+
 
         return render(request, "stationInfo/main.html", context=dict(data=data))
