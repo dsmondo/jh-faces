@@ -1,0 +1,713 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_script %}
+{% endblock %}
+
+{% block title %}입지 분석도구{% endblock %}
+{% block content %}
+    <div>
+        <div class="map-container" id="map">
+            <div class="sidebar" style="width:330px">
+                <div class="sidebar-list">
+                    <div style="display: flex;flex-direction: column;">
+                        <div class="sidebar-card-top" style="height:auto">
+                            <div class="sidebar-card-top-title">
+                                <a style="cursor:pointer;" onclick="location.reload()">입지 분석도구</a>
+                            </div>
+                            <div class="sidebar-tools">
+                                <div class="menu-container">
+                                    <div class="menu-title">
+                                        <a>검색</a>
+                                        <div onclick="document.getElementById('gfid').value = '';"><i
+                                                class="fa-solid fa-close"></i></div>
+                                    </div>
+                                    <form style="display: flex;justify-content: space-between;padding:0;" class="search"
+                                          id="searchForm">
+                                        <input style="width:185px;background-color: #FFFFFF" type="text" id="gfid"
+                                               name="gfid" placeholder="🔍  고유코드">
+                                        <label for="gfid" style="display: none">검색</label>
+                                        <button type="submit">검색</button>
+                                    </form>
+                                </div>
+                                <div class="menu-container">
+                                    <div class="menu-title">
+                                        <a>공시지가</a>
+                                        <div onclick="document.getElementById('minPrice').value = '';document.getElementById('maxPrice').value = '';">
+                                            <i class="fa-solid fa-close"></i></div>
+                                    </div>
+                                    <form style="display: flex;justify-content: space-between;padding:0;" class="search"
+                                          id="minmaxPriceForm">
+                                        <input style="background-color: #FFFFFF" type="number" id="minPrice"
+                                               name="minPrice" placeholder="최소">
+                                        <label for="minPrice" style="display: none">최소</label>
+                                        <a>-</a>
+                                        <input style="background-color: #FFFFFF" type="number" id="maxPrice"
+                                               name="maxPrice" placeholder="최대">
+                                        <label for="maxPrice" style="display: none">최대</label>
+                                        <button type="submit">설정</button>
+                                    </form>
+                                </div>
+                                <div class="menu-container">
+                                    <div class="menu-title">
+                                        <a>신규 추천 입지(그리드)</a>
+                                    </div>
+                                    <div class="menu-button-container">
+                                        {% if request.GET.ResultGEO1 %}
+                                            <div class="menu-button"
+                                                 onclick="manipulateURLParam('ResultGEO1', 'remove')">
+                                                <a style="background-color: #F0766F;color:#FFFFFF">✔ 급속</a>
+                                            </div>
+                                        {% else %}
+                                            <div class="menu-button" onclick="manipulateURLParam('ResultGEO1', 'true')">
+                                                <a>□ 급속</a>
+                                            </div>
+                                        {% endif %}
+
+
+                                        {% if request.GET.ResultGEO2 %}
+                                            <div class="menu-button"
+                                                 onclick="manipulateURLParam('ResultGEO2', 'remove')">
+                                                <a style="background-color: #4277F1;color:#FFFFFF">✔ 완속</a>
+                                            </div>
+                                        {% else %}
+                                            <div class="menu-button" onclick="manipulateURLParam('ResultGEO2', 'true')">
+                                                <a>□ 완속</a>
+                                            </div>
+                                        {% endif %}
+
+
+                                        {% if request.GET.ResultGEO3 %}
+                                            <div class="menu-button"
+                                                 onclick="manipulateURLParam('ResultGEO3', 'remove')">
+                                                <a style="background-color: #BE83B9;color:#FFFFFF">✔ 급/완속</a>
+                                            </div>
+                                        {% else %}
+                                            <div class="menu-button" onclick="manipulateURLParam('ResultGEO3', 'true')">
+                                                <a>□ 급/완속</a>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="menu-container">
+                                    <div class="menu-title">
+                                        <a>베스트 추천 입지</a>
+                                        <div onclick="window.open('{{ data.value.downloadURL }}', '_blank');"><i class="fa-solid fa-cloud-download"></i></div>
+                                    </div>
+                                    <div class="menu-button-container">
+                                        {% if request.GET.RecommandGEO1 %}
+                                            <div class="menu-button"
+                                                 onclick="manipulateURLParam('RecommandGEO1', 'remove')">
+                                                <a style="background-color: #1D3557;color:white">✔ 급속</a>
+                                            </div>
+                                        {% else %}
+                                            <div class="menu-button"
+                                                 onclick="manipulateURLParam('RecommandGEO1', 'true')">
+                                                <a>□ 급속</a>
+                                            </div>
+                                        {% endif %}
+
+
+                                        {% if request.GET.RecommandGEO2 %}
+                                            <div class="menu-button"
+                                                 onclick="manipulateURLParam('RecommandGEO2', 'remove')">
+                                                <a style="background-color: #457B9D;color:white">✔ 완속</a>
+                                            </div>
+                                        {% else %}
+                                            <div class="menu-button"
+                                                 onclick="manipulateURLParam('RecommandGEO2', 'true')">
+                                                <a>□ 완속</a>
+                                            </div>
+                                        {% endif %}
+
+
+                                        {% if request.GET.RecommandGEO3 %}
+                                            <div class="menu-button"
+                                                 onclick="manipulateURLParam('RecommandGEO3', 'remove')">
+                                                <a style="background-color: #750D37;color:white">✔ 급/완속</a>
+                                            </div>
+                                        {% else %}
+                                            <div class="menu-button"
+                                                 onclick="manipulateURLParam('RecommandGEO3', 'true')">
+                                                <a>□ 급/완속</a>
+                                            </div>
+                                        {% endif %}
+
+
+                                        {% if request.GET.RecommandGSGEO %}
+                                            <div class="menu-button"
+                                                 onclick="manipulateURLParam('RecommandGSGEO', 'remove')">
+                                                <a style="background-color: #B87D4B;color:white">✔ 주유소</a>
+                                            </div>
+                                        {% else %}
+                                            <div class="menu-button"
+                                                 onclick="manipulateURLParam('RecommandGSGEO', 'true')">
+                                                <a>□ 주유소</a>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="menu-container">
+                                    <div class="menu-title">
+                                        <a>기존 충전소 추가 설치 추천</a>
+                                    </div>
+                                    <div class="menu-button-container">
+                                        {% if request.GET.existInstalledGEO1 %}
+                                            <div class="menu-button"
+                                                 onclick="manipulateURLParam('existInstalledGEO1', 'remove')">
+                                                <a style="background-color: #85FF9E;color:#000000">✔ 급속</a>
+                                            </div>
+                                        {% else %}
+                                            <div class="menu-button"
+                                                 onclick="manipulateURLParam('existInstalledGEO1', 'true')">
+                                                <a>□ 급속</a>
+                                            </div>
+                                        {% endif %}
+
+
+                                        {% if request.GET.existInstalledGEO2 %}
+                                            <div class="menu-button"
+                                                 onclick="manipulateURLParam('existInstalledGEO2', 'remove')">
+                                                <a style="background-color: #F29361;color:white">✔ 완속</a>
+                                            </div>
+                                        {% else %}
+                                            <div class="menu-button"
+                                                 onclick="manipulateURLParam('existInstalledGEO2', 'true')">
+                                                <a>□ 완속</a>
+                                            </div>
+                                        {% endif %}
+
+
+                                        {% if request.GET.existInstalledGridGEO %}
+                                            <div class="menu-button"
+                                                 onclick="manipulateURLParam('existInstalledGridGEO', 'remove')">
+                                                <a style="background-color: #EAC435;color:white">✔ 격자</a>
+                                            </div>
+                                        {% else %}
+                                            <div class="menu-button"
+                                                 onclick="manipulateURLParam('existInstalledGridGEO', 'true')">
+                                                <a>□ 격자</a>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        {% if data.ui.searchData == 'None' %}
+
+                            <div class="card" id="card"
+                                 style="background-color: #FFFFFF;margin: 10px 0 10px 20px;width:300px;">
+                                <div class="card-title"
+                                     style="display: flex;flex-direction: row;justify-content: space-between;padding-bottom: 10px">
+                                    <a style="margin:0;color: #f5453d;">검색 결과가 없습니다.</a>
+                                    <div onclick="closeDetail();" style="width: 30px;height:30px;"><i
+                                            style="color: #f5453d" class="fa-solid fa-close"></i></div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="card" id="card"
+                                 style="display: none;background-color: #FFFFFF;margin: 10px 0 10px 20px;width:300px;">
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}s
+{% block postScripts %}
+    <script>
+        function manipulateURLParam(param, action) {
+            // 현재 URL을 가져옴
+            let currentURL = window.location.href;
+
+            // URL에 물음표가 있는지 확인
+            let questionMarkIndex = currentURL.indexOf('?');
+            let baseUrl = currentURL;
+            let params = '';
+
+            // URL에 물음표가 있는 경우
+            if (questionMarkIndex !== -1) {
+                baseUrl = currentURL.substring(0, questionMarkIndex);
+                params = currentURL.substring(questionMarkIndex + 1);
+            }
+
+            // URL에 파라미터가 있는 경우
+            if (params) {
+                let queryParams = params.split('&');
+                let paramExists = false;
+
+                // 파라미터를 확인하여 이미 있는 경우 플래그 설정
+                for (let i = 0; i < queryParams.length; i++) {
+                    let pair = queryParams[i].split('=');
+                    if (pair[0] === param) {
+                        paramExists = true;
+                        // 제거 동작일 경우 해당 파라미터를 배열에서 제거
+                        if (action === 'remove') {
+                            queryParams.splice(i, 1);
+                        }
+                        break;
+                    }
+                }
+
+                // 파라미터 추가 동작일 경우
+                if (action === 'true' && !paramExists) {
+                    queryParams.push(param + '=true');
+                }
+
+                // 변경된 파라미터로 URL 다시 생성
+                let newParams = queryParams.join('&');
+                let newURL = baseUrl + '?' + newParams;
+                window.history.replaceState({}, '', newURL);
+            } else {
+                // URL에 파라미터가 없는 경우
+                if (action === 'true') {
+                    window.history.replaceState({}, '', baseUrl + '?' + param + '=true');
+                }
+            }
+
+            // 페이지 다시 로드
+            location.reload();
+        }
+
+        function closeDetail() {
+            let cardDiv = document.getElementById('card');
+            if (cardDiv) {
+                cardDiv.style.display = 'none';
+            }
+        }
+
+        window.onload = function () {
+            // Django 뷰에서 전달받은 값 확인
+            var searchData = "{{ data.ui.searchData }}";
+
+            // searchData 값이 None이 아닌 경우
+            if (searchData !== "None") {
+                // 파라미터명으로 하면서 파라미터 값을 true로 추가
+                var urlParams = new URLSearchParams(window.location.search);
+                urlParams.set(searchData, 'true');
+
+                // URL을 새로운 주소로 업데이트
+                window.history.replaceState({}, '', window.location.pathname + '?' + urlParams.toString());
+            }
+        };
+
+
+        // URL 파라미터를 구문 분석하는 함수
+        function getURLParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const params = Object.fromEntries(urlParams.entries());
+            return params;
+        }
+
+        // URL 파라미터를 업데이트하는 함수
+        function updateURLParams(params) {
+            const searchParams = new URLSearchParams(params);
+            const newURL = `${window.location.origin}${window.location.pathname}?${searchParams.toString()}`;
+            window.history.replaceState({}, '', newURL);
+            location.reload()
+        }
+
+        // 경고창을 띄우고 사용자가 확인을 누를 경우에만 true를 반환하는 함수
+        function confirmAction(message) {
+            return confirm(message);
+        }
+
+        // 폼 제출을 처리하는 함수
+        function handleFormSubmit(formId, paramKey) {
+            document.getElementById(formId).addEventListener('submit', function (event) {
+                event.preventDefault();
+                const params = getURLParams();
+                const input = document.getElementById(paramKey);
+
+                if (formId === 'gfid') { // formId가 'gfid'일 때만 경고 메시지 출력
+                    const confirmationMessage = "검색 시 선택된 항목이 전체 초기화됩니다. 계속하시겠습니까?";
+                    if (confirmAction(confirmationMessage)) {
+                        if (input.value.trim() !== '') {
+                            params[paramKey] = input.value.trim();
+                            deleteOtherParams(params, paramKey);
+                            updateURLParams(params);
+                            // 추가 작업을 위한 코드를 여기에 추가할 수 있습니다. 예를 들어, 폼 제출 처리 등
+                        } else {
+                            delete params[paramKey];
+                            updateURLParams(params);
+                        }
+                    }
+                } else {
+                    if (input.value.trim() !== '') {
+                        params[paramKey] = input.value.trim();
+                        deleteOtherParams(params, paramKey);
+                        updateURLParams(params);
+                        // 추가 작업을 위한 코드를 여기에 추가할 수 있습니다. 예를 들어, 폼 제출 처리 등
+                    } else {
+                        delete params[paramKey];
+                        updateURLParams(params);
+                    }
+                }
+            });
+        }
+
+        // 다른 파라미터를 모두 삭제하는 함수
+        function deleteOtherParams(params, paramKey) {
+            for (const key in params) {
+                if (key !== paramKey) {
+                    delete params[key];
+                }
+            }
+        }
+
+        // 페이지 로드시 입력란에 URL 파라미터 값을 채우는 함수
+        function populateInputWithParams(formId, paramKey) {
+            const params = getURLParams();
+            const input = document.getElementById(paramKey);
+
+            if (params[paramKey]) {
+                input.value = params[paramKey];
+            }
+        }
+
+        // 폼 제출 처리
+        handleFormSubmit('searchForm', 'gfid');
+        populateInputWithParams('searchForm', 'gfid');
+
+        handleFormSubmit('minmaxPriceForm', 'minPrice');
+        handleFormSubmit('minmaxPriceForm', 'maxPrice');
+        populateInputWithParams('minmaxPriceForm', 'minPrice');
+        populateInputWithParams('minmaxPriceForm', 'maxPrice');
+
+        // 페이지 로드시 입력란에 URL 파라미터 값을 채우는 함수
+        window.addEventListener('load', function () {
+            const params = getURLParams();
+            const input = document.getElementById('gfid');
+
+            if (params['gfid']) {
+                input.value = params['gfid'];
+            }
+        });
+
+
+        function transformCoord(coordinates, properties, type) {
+            // MultiPolygon 지원을 위한 변환 과정
+            let paths = [];
+
+            if (type === 'polygon') {
+                coordinates.forEach(polygon => {
+                    let path = polygon.map(coord =>
+                        new kakao.maps.LatLng(coord[1], coord[0]));
+                    paths.push(path); // MultiPolygon의 경우 여러 path를 배열로 관리
+                });
+            } else if (type === 'circle') {
+                coordinates.forEach(circle => {
+                    paths.push(circle); // MultiPolygon의 경우 여러 path를 배열로 관리
+                });
+
+            }
+            let result = {
+                "name": properties.name,
+                "gid": properties.gid,
+                "fid": properties.fid,
+                "y_pred_lgb": properties.y_pred_lgb,
+                "color": properties.color,
+                "public_price": properties.public_price,
+                "population": properties.population,
+                "altitude": properties.altitude,
+                "emd_nm_k": properties.emd_nm_k,
+                "path": paths
+            };
+            // 만약 properties.address가 존재한다면
+            if (properties.address) {
+                result.address = properties.address; // address 속성을 추가합니다.
+            }
+
+            return result;
+        }
+
+        // ResultGEO 데이터 처리
+        const ResultGEO = {{ data.value.ResultGEO|safe }}
+
+        let ResultGEO_AREA = [];
+        // 좌표 추출 및 기타 정보 리스트화
+        if (ResultGEO.features && ResultGEO.features.length > 0) {
+            ResultGEO.features.forEach(feature => {
+                let properties = feature.properties
+                if (feature.geometry && feature.geometry.coordinates) {
+                    // geometry의 타입에 따라 다루는 방식이 달라질 수 있습니다.
+                    const coordinates = feature.geometry.coordinates;
+                    ResultGEO_AREA.push(transformCoord(coordinates, properties, 'polygon'));
+                }
+            });
+        }
+
+
+        // RecommandGEO 데이터 처리
+        const RecommandGEO = {{ data.value.RecommandGEO|safe }}
+
+        let RecommandGEO_AREA = [];
+        // 좌표 추출 및 기타 정보 리스트화
+        if (RecommandGEO.features && RecommandGEO.features.length > 0) {
+            RecommandGEO.features.forEach(feature => {
+                let properties = feature.properties
+                if (feature.geometry && feature.geometry.coordinates) {
+                    // geometry의 타입에 따라 다루는 방식이 달라질 수 있습니다.
+                    const coordinates = feature.geometry.coordinates;
+                    RecommandGEO_AREA.push(transformCoord(coordinates, properties, 'circle'));
+                }
+            });
+        }
+
+
+        // RecommandGSGEO 데이터 처리
+        const RecommandGSGEO = {{ data.value.RecommandGSGEO|safe }}
+
+        let RecommandGSGEO_AREA = [];
+        // 좌표 추출 및 기타 정보 리스트화
+        if (RecommandGSGEO.features && RecommandGSGEO.features.length > 0) {
+            RecommandGSGEO.features.forEach(feature => {
+                let properties = feature.properties
+                if (feature.geometry && feature.geometry.coordinates) {
+                    // geometry의 타입에 따라 다루는 방식이 달라질 수 있습니다.
+                    const coordinates = feature.geometry.coordinates;
+                    RecommandGSGEO_AREA.push(transformCoord(coordinates, properties, 'circle'));
+                }
+            });
+        }
+
+        // existInstalledGEO 데이터 처리
+        const existInstalledGEO = {{ data.value.existInstalledGEO|safe }}
+
+        let existInstalledGEO_AREA = [];
+        // 좌표 추출 및 기타 정보 리스트화
+        if (existInstalledGEO.features && existInstalledGEO.features.length > 0) {
+            existInstalledGEO.features.forEach(feature => {
+                let properties = feature.properties
+                if (feature.geometry && feature.geometry.coordinates) {
+                    // geometry의 타입에 따라 다루는 방식이 달라질 수 있습니다.
+                    const coordinates = feature.geometry.coordinates;
+                    existInstalledGEO_AREA.push(transformCoord(coordinates, properties, 'circle'));
+                }
+            });
+        }
+
+        // existInstalledGridGEO 데이터 처리
+        const existInstalledGridGEO = {{ data.value.existInstalledGridGEO|safe }}
+        let existInstalledGridGEO_AREA = [];
+        // 좌표 추출 및 기타 정보 리스트화
+        if (existInstalledGridGEO.features && existInstalledGridGEO.features.length > 0) {
+            existInstalledGridGEO.features.forEach(feature => {
+                let properties = feature.properties
+                if (feature.geometry && feature.geometry.coordinates) {
+                    // geometry의 타입에 따라 다루는 방식이 달라질 수 있습니다.
+                    const coordinates = feature.geometry.coordinates;
+                    existInstalledGridGEO_AREA.push(transformCoord(coordinates, properties, 'polygon'));
+                }
+            });
+        }
+
+
+        // ResultGEO: 영역데이터 표시
+        for (let i = 0, len = ResultGEO_AREA.length; i < len; i++) {
+            displayArea(ResultGEO_AREA[i], 'polygon');
+        }
+
+
+        // existInstalledGridGEO: 영역데이터 표시
+        for (let i = 0, len = existInstalledGridGEO_AREA.length; i < len; i++) {
+            displayArea(existInstalledGridGEO_AREA[i], 'polygon');
+        }
+
+        // RecommandGEO: 영역데이터 표시
+        for (let i = 0, len = RecommandGEO_AREA.length; i < len; i++) {
+            displayArea(RecommandGEO_AREA[i], 'circle');
+        }
+
+        // RecommandGSGEO: 영역데이터 표시
+        for (let i = 0, len = RecommandGSGEO_AREA.length; i < len; i++) {
+            displayArea(RecommandGSGEO_AREA[i], 'circle');
+        }
+
+        // existInstalledGEO: 영역데이터 표시
+        for (let i = 0, len = existInstalledGEO_AREA.length; i < len; i++) {
+            displayArea(existInstalledGEO_AREA[i], 'circle');
+        }
+
+
+        // 다각형을 생성하고 이벤트를 등록하는 함수입니다
+        function displayArea(area, figureType) {
+            // 원 생성 생성합니다
+            if (figureType === 'circle') {
+                let circle = new kakao.maps.Circle({
+                        center: new kakao.maps.LatLng(area.path[0][1], area.path[0][0]),  // 원의 중심좌표 입니다
+                        radius: 100, // 미터 단위의 원의 반지름입니다
+                        strokeWeight: 3, // 선의 두께입니다
+                        strokeColor: area.color, // 선의 색깔입니다
+                        strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                        strokeStyle: 'solid', // 선의 스타일 입니다
+                        fillColor: '#d3d3d3', // 채우기 색깔입니다
+                        fillOpacity: 0.7  // 채우기 불투명도 입니다
+                    })
+                ;
+
+                circle.setMap(map);
+
+                // 다각형에 mouseover 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 변경합니다
+                // 지역명을 표시하는 커스텀오버레이를 지도위에 표시합니다
+                kakao.maps.event.addListener(circle, 'mouseover', function (mouseEvent) {
+                    circle.setOptions({fillColor: '#181818'});
+
+                    customOverlay.setContent('<div class="area">' + area.name + '</div>');
+
+                    customOverlay.setPosition(mouseEvent.latLng);
+                    customOverlay.setMap(map);
+                });
+
+                // 다각형에 mousemove 이벤트를 등록하고 이벤트가 발생하면 커스텀 오버레이의 위치를 변경합니다
+                kakao.maps.event.addListener(circle, 'mousemove', function (mouseEvent) {
+                    customOverlay.setPosition(mouseEvent.latLng);
+                });
+
+                // 다각형에 mouseout 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 원래색으로 변경합니다
+                // 커스텀 오버레이를 지도에서 제거합니다
+                kakao.maps.event.addListener(circle, 'mouseout', function () {
+                    circle.setOptions({fillColor: '#d3d3d3'});
+                    customOverlay.setMap(null);
+                });
+
+                // 다각형에 click 이벤트를 등록하고 이벤트가 발생하면 다각형의 이름과 면적을 인포윈도우에 표시합니다
+                kakao.maps.event.addListener(circle, 'click', function () {
+                    let content =
+                        '<div class="card-title" style="display: flex;flex-direction: row;justify-content: space-between">' +
+                        '   <a style="margin:0;color: #181818;">' + area.name + '</a>' +
+                        '   <div onclick="closeDetail();" style="width: 15px;height:15px;cursor:pointer;"><i class="fa-solid fa-close"></i></div>' +
+                        '</div>' +
+
+                        (area.address ?
+                            '<div class="card-contents-detail" style="display: flex;flex-direction: column;padding: 0 0 20px 0">' +
+                            '   <a style="font-weight: 700"><i style="width:15px" class="fa-solid fa-location-dot"></i>주소</a><a style=padding-left:3px>' + area.address + '</a>' +
+                            '</div>'
+                            : '') +
+
+                        (area.gid ?
+                            '<div class="card-contents-detail">' +
+                            '   <a style="font-weight: 700"><i style="width:15px" class="fa-solid fa-fingerprint"></i>고유코드:</a><a style=padding-left:3px>' + area.gid +
+                            (area.fid ?
+                                '(' + area.fid + ')'
+                                : '') +
+
+                            '</a>' +
+                            '</div>'
+                            : '') +
+
+                        '<div class="card-contents-detail">' +
+                        '   <a style="font-weight: 700"><i style="width:15px" class="fa-solid fa-location-dot"></i>법정동:</a><a style=padding-left:3px>' + area.emd_nm_k + '</a>' +
+                        '</div>' +
+
+                        '<div class="card-contents-detail">' +
+                        '   <a style="font-weight: 700"><i style="width:15px" class="fa-solid fa-sack-dollar"></i>공시지가:</a><a style=padding-left:3px>' + Math.floor(area.public_price).toLocaleString('ko-KR') + ' 원/㎡</a>' +
+                        '</div>' +
+
+                        '<div class="card-contents-detail">' +
+                        '   <a style="font-weight: 700"><i style="width:15px" class="fa-solid fa-people-roof"></i>인구:</a><a style=padding-left:3px>' + area.population + ' 명</a>' +
+                        '</div>' +
+
+                        '<div class="card-contents-detail" style="padding: 0 0 20px 0;">' +
+                        '   <a style="font-weight: 700"><i style="width:15px" class="fa-solid fa-up-down"></i>고도:</a><a style=padding-left:3px>' + area.altitude + ' m</div>';
+                    +
+                        '</div>';
+                    const element = document.getElementById('card');
+                    element.style.display = 'block'
+                    element.innerHTML = content
+                })
+
+            } else if (figureType === 'polygon') {
+                let polygon = new kakao.maps.Polygon({
+                    map: map,
+                    path: area.path,
+                    strokeWeight: 3,
+                    strokeColor: area.color,
+                    strokeOpacity: 1,
+                    fillColor: '#FFFFFF',
+                    fillOpacity: 0.5
+                });
+
+                // 다각형에 mouseover 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 변경합니다
+                // 지역명을 표시하는 커스텀오버레이를 지도위에 표시합니다
+                kakao.maps.event.addListener(polygon, 'mouseover', function (mouseEvent) {
+                    polygon.setOptions({fillColor: '#181818'});
+
+                    customOverlay.setContent('<div class="area">' + area.name + '</div>');
+
+                    customOverlay.setPosition(mouseEvent.latLng);
+                    customOverlay.setMap(map);
+                });
+
+                // 다각형에 mousemove 이벤트를 등록하고 이벤트가 발생하면 커스텀 오버레이의 위치를 변경합니다
+                kakao.maps.event.addListener(polygon, 'mousemove', function (mouseEvent) {
+
+                    customOverlay.setPosition(mouseEvent.latLng);
+                });
+
+                // 다각형에 mouseout 이벤트를 등록하고 이벤트가 발생하면 폴리곤의 채움색을 원래색으로 변경합니다
+                // 커스텀 오버레이를 지도에서 제거합니다
+                kakao.maps.event.addListener(polygon, 'mouseout', function () {
+                    polygon.setOptions({fillColor: '#FFFFFF'});
+                    customOverlay.setMap(null);
+                });
+
+                // 다각형에 click 이벤트를 등록하고 이벤트가 발생하면 다각형의 이름과 면적을 인포윈도우에 표시합니다
+                kakao.maps.event.addListener(polygon, 'click', function () {
+                    let predictionText = '';
+                    if (area.y_pred_lgb === 1) {
+                        predictionText = '급속';
+                        predictionColor = '#EC6060'
+                    } else if (area.y_pred_lgb === 2) {
+                        predictionText = '완속';
+                        predictionColor = '#4277F1'
+                    } else if (area.y_pred_lgb === 3) {
+                        predictionText = '급/완속';
+                        predictionColor = '#BE83B9'
+                    }
+                    let content =
+                        '<div class="card-title" style="display: flex;flex-direction: row;justify-content: space-between">' +
+                        '   <div style="display: flex"><a style="margin:0;color: #181818;">' + area.name + '</a>' +
+                        '   <div style="margin: 0 0 0 10px;height:20px;background: ' + predictionColor + ';border-radius: 15px;padding: 2px 10px 2px 5px;color:#FFFFFF;"><i class="fa-solid fa-bolt"></i><a style="font-size:14px;">' + predictionText + '</a></div></div>' +
+                        '   <div onclick="closeDetail();" style="width: 15px;height:15px;cursor:pointer;"><i class="fa-solid fa-close"></i></div>' +
+                        '</div>' +
+                        (area.gid ?
+                            '<div class="card-contents-detail">' +
+                            '   <a style="font-weight: 700"><i style="width:15px" class="fa-solid fa-fingerprint"></i>고유코드:</a><a style=padding-left:3px>' + area.gid +
+                            (area.fid ?
+                                '(' + area.fid + ')'
+                                : '') +
+
+                            '</a>' +
+                            '</div>'
+                            : '') +
+                        '<div class="card-contents-detail">' +
+                        '   <a style="font-weight: 700"><i style="width:15px" class="fa-solid fa-location-dot"></i>법정동:</a><a style=padding-left:3px>' + area.emd_nm_k + '</a>' +
+                        '</div>' +
+
+                        '<div class="card-contents-detail">' +
+                        '   <a style="font-weight: 700"><i style="width:15px" class="fa-solid fa-sack-dollar"></i>공시지가:</a><a style=padding-left:3px>' + Math.floor(area.public_price).toLocaleString('ko-KR') + ' 원/㎡</a>' +
+                        '</div>' +
+
+                        '<div class="card-contents-detail">' +
+                        '   <a style="font-weight: 700"><i style="width:15px" class="fa-solid fa-people-roof"></i>인구:</a><a style=padding-left:3px>' + area.population + ' 명</a>' +
+                        '</div>' +
+
+                        '<div class="card-contents-detail" style="padding: 0 0 20px 0;">' +
+                        '   <a style="font-weight: 700"><i style="width:15px" class="fa-solid fa-up-down"></i>고도:</a><a style=padding-left:3px>' + area.altitude + ' m</div>';
+                    '</div>';
+                    const element = document.getElementById('card');
+                    element.style.display = 'block'
+                    element.innerHTML = content
+                })
+            }
+
+        }
+
+    </script>
+
+{% endblock %}
+
