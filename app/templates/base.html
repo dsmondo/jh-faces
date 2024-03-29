@@ -62,19 +62,20 @@
     <div class="topbar-logo">
         <a href="/">
             <img src="{% static 'logo.png' %}">
-            <h1>전기자동차 충전소 입지 분석도구</h1>
+{#            <h1>전기자동차 충전소 입지 분석도구</h1>#}
         </a>
     </div>
     <div class="topbar-contents">
         <div class="topbar-group" style="margin: 0 0 0 30px">
             <a href="/marketTools">입지 분석도구</a>
             <a href="/stationInfo">충전소 정보</a>
-            <a href="#" onclick="window.alert('준비 중인 기능입니다.')">충전기 관리</a>
-            <a href="#">고객지원</a>
+{#            <a href="#" onclick="window.alert('준비 중인 기능입니다.')">충전기 관리</a>#}
+            <a href="#" onclick="ChannelIO('showMessenger');">고객지원</a>
         </div>
         <div class="topbar-group" style="margin: 0 20px 0 0">
-            <a href="#" onclick="window.alert('준비 중인 기능입니다.')">로그인</a>
-            <a href="#" onclick="window.alert('베타 기간 중 회원가입을 받지 않고 있습니다.')">회원가입</a>
+            <a style="padding: 5px 10px 5px 5px" href="#" onclick="window.open('https://github.com/JG-Park/jh-faces', '_blank');"><i class="fa-brands fa-github"></i></a>
+            <a href="#" onclick="window.alert('베타 기간 중 사용이 불가능 한 기능입니다.')">로그인</a>
+            <a href="#" onclick="window.alert('베타 기간 중 사용이 불가능 한 기능입니다.')">회원가입</a>
         </div>
     </div>
 </div>
@@ -89,78 +90,78 @@
 
 <script>
 
-        function moveAndPinning(x, y) {
-            var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-                mapOption = {
-                    center: new kakao.maps.LatLng(x + 0.0005, y - 0.003), // 지도의 중심좌표
-                    level: 3 // 지도의 확대 레벨
-                };
+    function moveAndPinning(x, y) {
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(x + 0.0005, y - 0.003), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
 
-            var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
-            // 마커가 표시될 위치입니다
-            var markerPosition = new kakao.maps.LatLng(x, y);
+        // 마커가 표시될 위치입니다
+        var markerPosition = new kakao.maps.LatLng(x, y);
 
-            // 마커를 생성합니다
-            var marker = new kakao.maps.Marker({
-                position: markerPosition
-            });
+        // 마커를 생성합니다
+        var marker = new kakao.maps.Marker({
+            position: markerPosition
+        });
 
-            // 마커가 지도 위에 표시되도록 설정합니다
-            marker.setMap(map);
-
-
-            const inputNode = document.getElementById("map");
-            inputNode.style.removeProperty('position')
-            inputNode.style.position = 'static'
-
-            // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
-            // marker.setMap(null);
-        };
+        // 마커가 지도 위에 표시되도록 설정합니다
+        marker.setMap(map);
 
 
-        function updateStationID(stationID) {
-            // 현재 URL 가져오기
-            var currentUrl = window.location.href;
+        const inputNode = document.getElementById("map");
+        inputNode.style.removeProperty('position')
+        inputNode.style.position = 'static'
 
-            // URL 파라미터 파싱하기
-            var urlParams = new URLSearchParams(window.location.search);
+        // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
+        // marker.setMap(null);
+    };
 
-            // stationID가 없으면 기본값으로 설정
-            if (!stationID) {
-                stationID = '1';
-            }
 
-            // 새로운 stationID 설정
-            urlParams.set('stationID', stationID);
+    function updateStationID(stationID) {
+        // 현재 URL 가져오기
+        var currentUrl = window.location.href;
 
-            // 새로운 URL 생성
-            var newUrl = currentUrl.split('?')[0] + '?' + urlParams.toString();
+        // URL 파라미터 파싱하기
+        var urlParams = new URLSearchParams(window.location.search);
 
-            // 현재 URL이 바뀌었는지 확인 후 리다이렉트
-            if (currentUrl !== newUrl) {
-                window.location.href = newUrl;
-            }
+        // stationID가 없으면 기본값으로 설정
+        if (!stationID) {
+            stationID = '1';
         }
 
+        // 새로운 stationID 설정
+        urlParams.set('stationID', stationID);
 
-        // 사이드바 토글 기능
-        function toggleSidebar(className, hiddenerClass, mode) {
-            var sidebar = document.querySelector(className);
-            if (mode == 'add') {
-                sidebar.classList.add(hiddenerClass);
-                var addButton = document.querySelector('.sidebar-card-toggle')
-                addButton.style.display = 'block'
-            }
-            if (mode == 'remove') {
-                sidebar.classList.remove(hiddenerClass);
-                var addButton = document.querySelector('.sidebar-card-toggle')
-                addButton.style.display = 'none'
-            }
-            if (mode == 'toggle') {
-                sidebar.classList.toggle(hiddenerClass);
-            }
+        // 새로운 URL 생성
+        var newUrl = currentUrl.split('?')[0] + '?' + urlParams.toString();
+
+        // 현재 URL이 바뀌었는지 확인 후 리다이렉트
+        if (currentUrl !== newUrl) {
+            window.location.href = newUrl;
         }
+    }
+
+
+    // 사이드바 토글 기능
+    function toggleSidebar(className, hiddenerClass, mode) {
+        var sidebar = document.querySelector(className);
+        if (mode == 'add') {
+            sidebar.classList.add(hiddenerClass);
+            var addButton = document.querySelector('.sidebar-card-toggle')
+            addButton.style.display = 'block'
+        }
+        if (mode == 'remove') {
+            sidebar.classList.remove(hiddenerClass);
+            var addButton = document.querySelector('.sidebar-card-toggle')
+            addButton.style.display = 'none'
+        }
+        if (mode == 'toggle') {
+            sidebar.classList.toggle(hiddenerClass);
+        }
+    }
 
     var container = document.getElementById('map');
     var options = {
@@ -222,7 +223,6 @@
     const inputNode = document.getElementById("map");
     inputNode.style.removeProperty('position')
     inputNode.style.position = 'static'
-
 
 
 </script>
