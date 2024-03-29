@@ -9,7 +9,7 @@ from django.contrib.staticfiles import finders
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from stationInfo.models import Charging_Station_Info
+from .models import Charging_Station_Info
 
 import requests
 import os

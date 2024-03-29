@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.db.models import Q
+from django.contrib.staticfiles import finders
+
 from rest_framework.views import APIView
+
 
 from .models import ResultGEO
 from .models import RecommandGEO
@@ -15,6 +18,10 @@ import json
 from dotenv import load_dotenv
 
 load_dotenv()
+
+def loadDATA():
+    from .geoJSONtoDB import migrate_existInstalledGEO
+    migrate_existInstalledGEO(finders.find('급속이필요한곳.geojson'))
 
 
 class MainPage(APIView):
@@ -35,7 +42,9 @@ class MainPage(APIView):
         maxPrice = request.GET.get('maxPrice')
         gfid = request.GET.get('gfid')
         if gfid != None:
-            data['ui']['searchData'] = 'None'
+            if not gfid.isdigit():
+                gfid = None
+                data['ui']['searchData'] = 'None'
 
         # ResultGEO
         if gfid == None:  # 검색값이 없는 경우
