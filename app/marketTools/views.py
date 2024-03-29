@@ -296,4 +296,4 @@ class MainPage(APIView):
         else:
             data['value']['existInstalledGridGEO'] = '[]'
 
-        return render(request, "marketTools/main.html", context=dict(data=data))
+        return render(request, "marketTools/marketTools.html", context=dict(data=data))

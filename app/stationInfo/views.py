@@ -200,4 +200,4 @@ class MainPage(APIView):
 
 
 
-        return render(request, "stationInfo/main.html", context=dict(data=data))
+        return render(request, "stationInfo/stationInfo.html", context=dict(data=data))
