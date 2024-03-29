@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_script %}
+{% endblock %}
+
+{% block title %}입지 분석도구{% endblock %}
+{% block content %}
+    <style>
+        body, html {
+            margin: 0;
+            height: 100%;
+        }
+
+        .parent {
+            width: 100%;
+            height: 90vh;
+            background-color: #FFFFFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 300px;
+            height: 250px;
+            -webkit-border-radius: 50px;
+            border-radius: 50px;
+            background: #84CE7A;
+            -webkit-box-shadow: 12px 12px 24px #d9d9d9, -12px -12px 24px #ffffff;
+            box-shadow: 12px 12px 24px #d9d9d9, -12px -12px 24px #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* 자연스러운 애니메이션 추가 */
+            cursor: pointer;
+            margin: 0 50px 0 0
+        }
+
+        .container:hover {
+            transform: scale(1.05);
+        }
+
+        .container a {
+            text-decoration: none;
+            font-size: 30px;
+            font-weight: bold;
+            color: #FFFFFF;
+        }
+    </style>
+
+    <div class="parent">
+        <div onclick="location.href = '/marketTools';" class="container">
+            <a>입지 분석도구</a>
+        </div>
+        <div onclick="location.href = '/stationInfo';" class="container" style="background-color: #E37E72">
+            <a>충전소 정보</a>
+        </div>
+    </div>
+
+{% endblock %}s
+{% block postScripts %}
+    <script>
+
+    </script>
+
+{% endblock %}
+

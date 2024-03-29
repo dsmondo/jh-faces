@@ -162,6 +162,34 @@ body {
     display: block;
 }
 
+.topbar-group a {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+    border-radius: 5px;
+    position: relative;
+}
+
+.topbar-group a:hover::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+}
+
+.topbar-group a:hover {
+    transform: scale(1.1);
+}
+
+
 .topbar-logo {
     margin: 0 60px 0 60px;
     cursor: pointer;
@@ -169,6 +197,7 @@ body {
 
 .topbar-logo img {
     width: 200px;
+    padding: 10px 0;
     height: auto;
     margin: 0;
 }
@@ -176,7 +205,7 @@ body {
 .topbar-logo h1 {
     font-family: S-CoreDream-6Bold;
     text-align: center;
-    font-size: 14.5px;
+    font-size: 14px;
     width: 200px;
     margin: 0;
     color: #64BF6A;
