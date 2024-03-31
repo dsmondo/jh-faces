@@ -1,11 +1,12 @@
 # 지훈과얼굴들(jh-faces) 프로젝트
-If you are an English user, please scroll down to ENG section.
+If you are an English user, please scroll down or click [ENG section](https://github.com/JG-Park/jh-faces?tab=readme-ov-file#eng-jh-faces-project).
+
 멀티캠퍼스 멀티잇 데이터 분석 &amp; 엔지니어 34회차 세미프로젝트 3조 '지훈과 얼굴들'의 GitHub 저장소입니다.
 
-프로젝트 기간 : 2024/03/07 ~ 2024/03/29  (17 days)
-분석 목표 : 지리/공간 데이터를 통해 시대 상황을 고려한 전기차 충전소 입지 예측 모델 구현
-
-팀원 구성(가나다순) : 박지건, 윤지훈, 이수민, 임예원, 정혜원, 황유진
+- 프로젝트 기간 : 2024/03/07 ~ 2024/03/29  (17 days)
+- 분석 목표 : 지리/공간 데이터를 통해 시대 상황을 고려한 전기차 충전소 입지 예측 모델 구현
+- 팀원 구성(가나다순) : 박지건, 윤지훈, 이수민, 임예원, 정혜원, 황유진
+- 데모페이지 : https://jhfaces.jgpark.kr
 
 ![스크린샷1](https://github.com/JG-Park/jh-faces/assets/50548719/0a99b131-8881-4996-9bca-9852cf153b5b)
 ![스크린샷2](https://github.com/JG-Park/jh-faces/assets/50548719/515657a5-a312-46fa-b5e4-a7c799410fff)
