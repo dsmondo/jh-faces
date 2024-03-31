@@ -18,14 +18,14 @@
                             <div class="sidebar-tools">
                                 <div class="menu-container">
                                     <div class="menu-title">
-                                        <a>검색</a>
+                                        <a><i style="width:18px;margin-right:2px" class="fa-solid fa-search"></i> 검색</a>
                                         <div onclick="document.getElementById('gfid').value = '';"><i
                                                 class="fa-solid fa-close"></i></div>
                                     </div>
                                     <form style="display: flex;justify-content: space-between;padding:0;" class="search"
                                           id="searchForm">
                                         <input style="width:185px;background-color: #FFFFFF" type="text" id="gfid"
-                                               name="gfid" placeholder="🔍  고유코드">
+                                               name="gfid" placeholder="영역 고유코드 검색">
                                         <label for="gfid" style="display: none">검색</label>
                                         <button type="submit">검색</button>
                                     </form>
@@ -92,7 +92,10 @@
                                 <div class="menu-container">
                                     <div class="menu-title">
                                         <a>베스트 추천 입지</a>
-                                        <div onclick="window.open('{{ data.value.downloadURL }}', '_blank');"><i class="fa-solid fa-cloud-download"></i></div>
+                                        <div onclick="window.open('/static/지훈과얼굴들_추천입지.pdf', '_blank');">
+                                            <i class="fa-solid fa-file-pdf"></i></div>
+                                        <div onclick="window.open('/static/지훈과얼굴들_추천입지.xlsx', '_blank');">
+                                            <i class="fa-solid fa-file-csv"></i></div>
                                     </div>
                                     <div class="menu-button-container">
                                         {% if request.GET.RecommandGEO1 %}
@@ -199,10 +202,15 @@
                             <div class="card" id="card"
                                  style="background-color: #FFFFFF;margin: 10px 0 10px 20px;width:300px;">
                                 <div class="card-title"
-                                     style="display: flex;flex-direction: row;justify-content: space-between;padding-bottom: 10px">
-                                    <a style="margin:0;color: #f5453d;">검색 결과가 없습니다.</a>
+                                     style="display: flex;flex-direction: row;justify-content: space-between;">
+                                    <a style="margin:0;color: #f5453d;"><i style="margin-right:5px"
+                                                                           class="fa-solid fa-warning"></i>검색 결과가 없습니다.</a>
                                     <div onclick="closeDetail();" style="width: 30px;height:30px;"><i
-                                            style="color: #f5453d" class="fa-solid fa-close"></i></div>
+                                            style="color: #f5453d;margin-left:30px" class="fa-solid fa-close"></i></div>
+
+                                </div>
+                                <div class="card-contents-detail" style="padding-bottom: 10px;">
+                                    <a style="font-weight: 700">영역 검색시 숫자코드만 지원합니다.</a>
                                 </div>
                             </div>
                         {% else %}
@@ -261,11 +269,6 @@
                 let newParams = queryParams.join('&');
                 let newURL = baseUrl + '?' + newParams;
                 window.history.replaceState({}, '', newURL);
-            } else {
-                // URL에 파라미터가 없는 경우
-                if (action === 'true') {
-                    window.history.replaceState({}, '', baseUrl + '?' + param + '=true');
-                }
             }
 
             // 페이지 다시 로드
@@ -295,58 +298,122 @@
         };
 
 
-        // URL 파라미터를 구문 분석하는 함수
-        function getURLParams() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const params = Object.fromEntries(urlParams.entries());
-            return params;
-        }
-
-        // URL 파라미터를 업데이트하는 함수
-        function updateURLParams(params) {
-            const searchParams = new URLSearchParams(params);
-            const newURL = `${window.location.origin}${window.location.pathname}?${searchParams.toString()}`;
-            window.history.replaceState({}, '', newURL);
-            location.reload()
-        }
-
-        // 경고창을 띄우고 사용자가 확인을 누를 경우에만 true를 반환하는 함수
-        function confirmAction(message) {
+        // 함수: 경고 메시지 표시
+        function showAlert(message) {
             return confirm(message);
         }
 
-        // 폼 제출을 처리하는 함수
-        function handleFormSubmit(formId, paramKey) {
-            document.getElementById(formId).addEventListener('submit', function (event) {
-                event.preventDefault();
-                const params = getURLParams();
-                const input = document.getElementById(paramKey);
+        // 함수: 검색 폼 초기화
+        function resetSearchForm() {
+            document.getElementById('gfid').value = '';
+        }
 
-                if (formId === 'gfid') { // formId가 'gfid'일 때만 경고 메시지 출력
-                    const confirmationMessage = "검색 시 선택된 항목이 전체 초기화됩니다. 계속하시겠습니까?";
-                    if (confirmAction(confirmationMessage)) {
-                        if (input.value.trim() !== '') {
-                            params[paramKey] = input.value.trim();
-                            deleteOtherParams(params, paramKey);
-                            updateURLParams(params);
-                            // 추가 작업을 위한 코드를 여기에 추가할 수 있습니다. 예를 들어, 폼 제출 처리 등
-                        } else {
-                            delete params[paramKey];
-                            updateURLParams(params);
-                        }
-                    }
-                } else {
-                    if (input.value.trim() !== '') {
-                        params[paramKey] = input.value.trim();
-                        deleteOtherParams(params, paramKey);
-                        updateURLParams(params);
-                        // 추가 작업을 위한 코드를 여기에 추가할 수 있습니다. 예를 들어, 폼 제출 처리 등
-                    } else {
-                        delete params[paramKey];
-                        updateURLParams(params);
-                    }
+        // 함수: 가격 입력 초기화
+        function resetPriceInputs() {
+            document.getElementById('minPrice').value = '';
+            document.getElementById('maxPrice').value = '';
+        }
+
+        // 함수: 검색 버튼 클릭 시
+        function handleSearch(type) {
+            if (type === 'search') {
+                // 경고 메시지 표시
+                if (!showAlert("검색 시 선택된 항목이 전체 초기화됩니다. 계속하시겠습니까?")) {
+                    // 사용자가 취소한 경우 아무것도 하지 않음
+                    return;
                 }
+            }
+            // 가격 입력 필드 값 가져오기
+            var minPriceValue = document.getElementById('minPrice').value;
+            var maxPriceValue = document.getElementById('maxPrice').value;
+
+            // URL 파라미터 가져오기
+            var urlParams = new URLSearchParams(window.location.search);
+
+            // 기존 파라미터 유지 및 추가 또는 변경
+            if (minPriceValue !== '') {
+                urlParams.set('minPrice', minPriceValue);
+            } else {
+                urlParams.delete('minPrice');
+            }
+            if (maxPriceValue !== '') {
+                urlParams.set('maxPrice', maxPriceValue);
+            } else {
+                urlParams.delete('maxPrice');
+            }
+
+            // 'gfid' 파라미터가 존재하면 삭제
+            if (urlParams.has('gfid')) {
+                urlParams.delete('gfid');
+            }
+
+            // URL에 새로운 파라미터 추가
+            var url = window.location.pathname + '?' + urlParams.toString();
+
+            // 페이지 이동
+            window.location.href = url;
+
+        }
+
+        // 가격 입력 필드 이벤트 리스너 등록
+        document.getElementById('minPrice').addEventListener('input', function () {
+            // 검색 폼 초기화
+            resetSearchForm();
+        });
+
+        document.getElementById('maxPrice').addEventListener('input', function () {
+            // 검색 폼 초기화
+            resetSearchForm();
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+            // 폼이 제출될 때 실행되는 함수
+            document.getElementById('searchForm').addEventListener('submit', function (event) {
+                event.preventDefault(); // 폼 제출 기본 동작 막기
+
+                // gfid input 엘리먼트 가져오기
+                var gfidInput = document.getElementById('gfid');
+
+                // 기존 URL 파라미터 가져오기
+                var urlParams = new URLSearchParams(window.location.search);
+
+                // lng, lat, level 파라미터 값 확인
+                var lngParam = urlParams.get('lng');
+                var latParam = urlParams.get('lat');
+                var levelParam = urlParams.get('level');
+
+                // URL에 lng, lat, level 파라미터가 있는지 확인
+                if (lngParam !== null && latParam !== null && levelParam !== null) {
+                    // lng, lat, level 파라미터가 있을 경우 해당 값을 유지
+                    urlParams.set('gfid', gfidInput.value); // gfid 파라미터 설정
+                } else {
+                    // lng, lat, level 파라미터가 없을 경우 gfid 값만 남기기
+                    urlParams = new URLSearchParams(); // 새로운 URLSearchParams 객체 생성
+                    urlParams.set('gfid', gfidInput.value); // gfid 파라미터 설정
+                }
+
+                // 새로운 URL 생성
+                var newUrl = window.location.pathname + '?' + urlParams.toString();
+
+                // 페이지 리다이렉션
+                window.location.href = newUrl;
             });
+        });
+
+        // 검색 버튼 클릭 이벤트 리스너 등록
+        document.getElementById('minmaxPriceForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            // 검색 실행
+            handleSearch();
+        });
+
+        function getUrlParams() {
+            var params = {};
+            var queryString = window.location.search.substring(1);
+            var urlParams = new URLSearchParams(queryString);
+            urlParams.forEach(function (value, key) {
+                params[key] = value;
+            });
+            return params;
         }
 
         // 다른 파라미터를 모두 삭제하는 함수
@@ -368,23 +435,73 @@
             }
         }
 
-        // 폼 제출 처리
-        handleFormSubmit('searchForm', 'gfid');
-        populateInputWithParams('searchForm', 'gfid');
+        function updateUrlParams(params) {
+            var queryString = new URLSearchParams(params).toString();
+            var url = window.location.pathname + '?' + queryString;
+            window.history.replaceState({}, '', url);
+        }
 
-        handleFormSubmit('minmaxPriceForm', 'minPrice');
-        handleFormSubmit('minmaxPriceForm', 'maxPrice');
-        populateInputWithParams('minmaxPriceForm', 'minPrice');
-        populateInputWithParams('minmaxPriceForm', 'maxPrice');
+        function removeURLParameter(parameterName) {
+            var url = window.location.href;
+            var urlParts = url.split('?');
+
+            if (urlParts.length >= 2) {
+                var baseUrl = urlParts[0];
+                var queryString = urlParts[1];
+
+                var params = queryString.split('&');
+                var newParams = [];
+
+                for (var i = 0; i < params.length; i++) {
+                    var paramName = params[i].split('=')[0];
+                    if (paramName !== parameterName) {
+                        newParams.push(params[i]);
+                    }
+                }
+
+                var newQueryString = newParams.join('&');
+
+                if (newQueryString !== '') {
+                    return baseUrl + '?' + newQueryString;
+                } else {
+                    return baseUrl;
+                }
+            } else {
+                return url;
+            }
+        }
+
 
         // 페이지 로드시 입력란에 URL 파라미터 값을 채우는 함수
         window.addEventListener('load', function () {
-            const params = getURLParams();
-            const input = document.getElementById('gfid');
+            var params = getUrlParams();
 
-            if (params['gfid']) {
-                input.value = params['gfid'];
+            if ('gfid' in params) {
+                if (params['gfid'] !== '') {
+                    document.getElementById('gfid').value = params['gfid'];
+                } else {
+                    window.history.pushState({}, document.title, removeURLParameter('gfid'));
+                    location.reload()
+                }
             }
+            if ('minPrice' in params) {
+                if (params['minPrice'] !== '') {
+                    document.getElementById('minPrice').value = params['minPrice'];
+                } else {
+                    window.history.pushState({}, document.title, removeURLParameter('minPrice'));
+                    location.reload()
+                }
+            }
+            if ('maxPrice' in params) {
+                if (params['maxPrice'] !== '') {
+                    document.getElementById('maxPrice').value = params['maxPrice'];
+                } else {
+                    window.history.pushState({}, document.title, removeURLParameter('maxPrice'));
+                    location.reload()
+                }
+            }
+
+
         });
 
 
