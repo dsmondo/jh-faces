@@ -54,7 +54,7 @@ This is the GitHub repository for the JH-Faces('Jihoon and Faces') team, team 3 
 - Project Period: 2024/03/07 ~ 2024/03/29 (17 days)
 - Analysis Goal: Implement a location prediction model for electric vehicle charging stations considering the current situation, using geographic/spatial data.
 - Team Members : Carolyne Jung, Jigeon Park, Jihoon Youn, Sumin Lee, Yewon Lim, Yujin Hwang
-- Demo Page : : https://jhfaces.jgpark.kr
+- Demo Page : https://jhfaces.jgpark.kr
 
 ![Screenshot1](https://github.com/JG-Park/jh-faces/assets/50548719/0a99b131-8881-4996-9bca-9852cf153b5b)
 ![Screenshot2](https://github.com/JG-Park/jh-faces/assets/50548719/515657a5-a312-46fa-b5e4-a7c799410fff)
