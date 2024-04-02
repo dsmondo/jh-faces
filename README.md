@@ -1,5 +1,50 @@
+# jh-faces Project
+
+This is the GitHub repository for the JH-Faces('Jihoon and Faces') team, from the 34th MultiCampus Multi-IT Data Analysis & Engineering Semi-Project.
+
+- Project Period: Mar 07 ~ Mar 29 2024 (17 days)
+- Analysis Goal: Implement a location prediction model for electric vehicle charging stations considering the current situation, using geographic/spatial data.
+- Team Members : Carolyne Jung, Jigeon Park, Jihoon Youn, Sumin Lee, Yewon Lim, Yujin Hwang
+- Demo Page : https://jhfaces.jgpark.kr
+
+![Screenshot1](https://github.com/JG-Park/jh-faces/assets/50548719/0a99b131-8881-4996-9bca-9852cf153b5b)
+![Screenshot2](https://github.com/JG-Park/jh-faces/assets/50548719/515657a5-a312-46fa-b5e4-a7c799410fff)
+
+## Overview
+- Provides an integrated solution for electric vehicle charging stations
+- Offers real-time information (basic information, real-time status, etc.) and location information for electric vehicle charging stations
+- Provides a location analysis tool for electric vehicle charging stations
+- Operated using Django, MariaDB, and Nginx through Docker Compose
+
+## Release Notes
+
+### v0.3b (April 1, 2024)
+- Added market analysis tool
+- Recommendations for new charging station sites
+- Best recommended sites based on various criteria
+- Additional recommendations for existing stations
+- Enhanced UI
+  - Consolidated base site UI into base.html
+  - Modularized station information page (main.html)
+- Updated CSS code
+- Updated configuration files (settings.py, urls.py)
+
+### v0.2b (March 18, 2024)
+- Fixed a bug causing errors when fetching real-time information from electric vehicle charging stations
+- Improved UI of the charging station detail page
+- Added a sidebar toggle function
+- Enhanced website loading speed
+
+### v0.1b (March 11, 2024)
+- Provided real-time information on electric vehicle charging stations in Naju-si
+- Provided basic information and list of charging stations in Naju-si
+- Enabled location checking based on Kakao Map
+
+## Full Changelog
+- https://github.com/JG-Park/jh-faces/commits/
+
+---
 # 지훈과얼굴들(jh-faces) 프로젝트
-If you are an English user, please scroll down or click [ENG section](https://github.com/JG-Park/jh-faces?tab=readme-ov-file#eng-jh-faces-project).
 
 멀티캠퍼스 멀티잇 데이터 분석 &amp; 엔지니어 34회차 세미프로젝트 3조 '지훈과 얼굴들'의 GitHub 저장소입니다.
 
@@ -45,49 +90,3 @@ If you are an English user, please scroll down or click [ENG section](https://gi
 ## 전체 변경 내역
 - https://github.com/JG-Park/jh-faces/commits/
 
-
----
-# [ENG] jh-faces Project
-
-This is the GitHub repository for the JH-Faces('Jihoon and Faces') team, team 3 of the 34th MultiCampus Multi-IT Data Analysis & Engineering Semi-Project.
-
-- Project Period: 2024/03/07 ~ 2024/03/29 (17 days)
-- Analysis Goal: Implement a location prediction model for electric vehicle charging stations considering the current situation, using geographic/spatial data.
-- Team Members : Carolyne Jung, Jigeon Park, Jihoon Youn, Sumin Lee, Yewon Lim, Yujin Hwang
-- Demo Page : https://jhfaces.jgpark.kr
-
-![Screenshot1](https://github.com/JG-Park/jh-faces/assets/50548719/0a99b131-8881-4996-9bca-9852cf153b5b)
-![Screenshot2](https://github.com/JG-Park/jh-faces/assets/50548719/515657a5-a312-46fa-b5e4-a7c799410fff)
-
-## Overview
-- Provides an integrated solution for electric vehicle charging stations
-- Offers real-time information (basic information, real-time status, etc.) and location information for electric vehicle charging stations
-- Provides a location analysis tool for electric vehicle charging stations
-- Operated using Django, MariaDB, and Nginx through Docker Compose
-
-## Release Notes
-
-### v0.3b (April 1, 2024)
-- Added market analysis tool
-- Recommendations for new charging station sites
-- Best recommended sites based on various criteria
-- Additional recommendations for existing stations
-- Enhanced UI
-  - Consolidated base site UI into base.html
-  - Modularized station information page (main.html)
-- Updated CSS code
-- Updated configuration files (settings.py, urls.py)
-
-### v0.2b (March 18, 2024)
-- Fixed a bug causing errors when fetching real-time information from electric vehicle charging stations
-- Improved UI of the charging station detail page
-- Added a sidebar toggle function
-- Enhanced website loading speed
-
-### v0.1b (March 11, 2024)
-- Provided real-time information on electric vehicle charging stations in Naju-si
-- Provided basic information and list of charging stations in Naju-si
-- Enabled location checking based on Kakao Map
-
-## Full Changelog
-- https://github.com/JG-Park/jh-faces/commits/
